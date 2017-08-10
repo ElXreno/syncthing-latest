@@ -1,0 +1,3 @@
+# syncthing
+
+The syncthing package
