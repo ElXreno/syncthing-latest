@@ -35,16 +35,16 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          1fc2ab444b3a3bf2ab1e2e2a9e5f1f4987103b00
+%global commit          77578e8aac65c0660d98ad7c4f65b020718cb7c2
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 1fc2ab444b3a3bf2ab1e2e2a9e5f1f4987103b00 == version 0.14.35
+# commit 77578e8aac65c0660d98ad7c4f65b020718cb7c2 == version 0.14.36
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.35
-Release:        2%{?dist}
+Version:        0.14.36
+Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
 License:        MPLv2.0 and MIT and OFL
@@ -621,6 +621,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Sat Aug 12 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.36-1
+- Update to version 0.14.36.
+
 * Wed Aug 09 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.35-2
 - Add Provides for bundled JS libraries and adapt License tag.
 
