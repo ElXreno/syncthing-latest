@@ -44,7 +44,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        0.14.36
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
 License:        MPLv2.0 and MIT and OFL
@@ -55,6 +55,7 @@ Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}
 # Patch build.go script so go build doesn't install deps
 # and produces debug-enabled binaries for rpm
 Patch0:         00-go-build-flags.patch
+Patch1:         00-go-build-flags-ppc64.patch
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
@@ -334,7 +335,13 @@ This package contains the syncthing server tools.
 
 %prep
 %setup -q -n syncthing
+
+# PIE build mode isn't supported on ppc64
+%ifarch ppc64
+%patch1 -p1
+%else
 %patch0 -p1
+%endif
 
 
 %build
@@ -621,6 +628,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Tue Aug 15 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.36-2
+- Adapt patch to work on ppc64, where PIE isn't supported.
+
 * Sat Aug 12 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.36-1
 - Update to version 0.14.36.
 

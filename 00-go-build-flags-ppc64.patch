@@ -1,0 +1,38 @@
+diff --git a/build.go b/build.go
+index d8e7f00..bdceb0d 100644
+--- a/build.go
++++ b/build.go
+@@ -424,9 +424,16 @@ func build(target target, tags []string) {
+ 	lazyRebuildAssets()
+ 
+ 	tags = append(target.tags, tags...)
++	tags = append(tags, "rpm_crashtraceback")
+ 
+ 	rmr(target.BinaryName())
+-	args := []string{"build", "-i", "-v", "-ldflags", ldflags()}
++
++	build_id, _ := ioutil.ReadFile("build_id")
++	ldflags := fmt.Sprintf("%s %s -B 0x%s -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'",
++		ldflags(), os.Getenv("LDFLAGS"), build_id)
++
++    args := []string{"build", "-compiler", "gc", "-ldflags", ldflags, "-a", "-v", "-x"}
++
+ 	if len(tags) > 0 {
+ 		args = append(args, "-tags", strings.Join(tags, " "))
+ 	}
+@@ -702,11 +709,10 @@ func ldflags() string {
+ 	}
+ 
+ 	b := new(bytes.Buffer)
+-	b.WriteString("-w")
+-	fmt.Fprintf(b, " -X main.Version%c%s", sep, version)
+-	fmt.Fprintf(b, " -X main.BuildStamp%c%d", sep, buildStamp())
+-	fmt.Fprintf(b, " -X main.BuildUser%c%s", sep, buildUser())
+-	fmt.Fprintf(b, " -X main.BuildHost%c%s", sep, buildHost())
++	fmt.Fprintf(b, "-X main.Version%c%s ", sep, version)
++	fmt.Fprintf(b, "-X main.BuildStamp%c%d ", sep, buildStamp())
++	fmt.Fprintf(b, "-X main.BuildUser%c%s ", sep, buildUser())
++	fmt.Fprintf(b, "-X main.BuildHost%c%s", sep, buildHost())
+ 	return b.String()
+ }
+ 
