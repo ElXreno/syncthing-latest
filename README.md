@@ -5,7 +5,7 @@ the use-case, syncthing can be run as a system-wide service for a specific user,
 or as a real user-session service.
 
 Once enabled, the syncthing service exposes a web interface (the port can be
-changed in the configuration later) at address <http://localhost:8384>.
+changed in the configuration later) at address [localhost:8384](http://localhost:8384).
 
 For manual (or offline) configuration, the settings file of syncthing (XML
 format) lives at `$HOME/.config/syncthing/config.xml`.
