@@ -44,7 +44,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        0.14.37
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
 License:        MPLv2.0 and MIT and OFL
@@ -642,6 +642,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Mon Sep 18 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.37-2
+- Rebuild for updated dependencies, fixing crashes.
+
 * Tue Sep 05 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.37-1
 - Update to version 0.14.37.
 
