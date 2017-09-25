@@ -35,16 +35,16 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          c7221b035d94d459fe8bbe1e88df67b7d320b216
+%global commit          a9aa375109184f0c124f8a1575c58baa2656a61b
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit c7221b035d94d459fe8bbe1e88df67b7d320b216 == version 0.14.37
+# commit a9aa375109184f0c124f8a1575c58baa2656a61b == version 0.14.38
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.37
-Release:        2%{?dist}
+Version:        0.14.38
+Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
 License:        MPLv2.0 and MIT and OFL
@@ -57,6 +57,10 @@ Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}
 Patch0:         00-go-build-flags.patch
 Patch1:         00-go-build-flags-ppc64.patch
 
+# golang(github.com/calmh/luhn) v2.0.0 has incompatible correctness fixes,
+# so upstream syncthing decided to re-include an incorrect version.
+Patch2:         02-luhn-fixes.patch
+
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
 # If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
@@ -67,10 +71,10 @@ BuildRequires:  systemd
 
 %if ! 0%{?with_bundled}
 BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
+BuildRequires:  golang(github.com/AudriusButkevicius/kcp-go)
 BuildRequires:  golang(github.com/AudriusButkevicius/pfilter)
 BuildRequires:  golang(github.com/bkaradzic/go-lz4)
 BuildRequires:  golang(github.com/calmh/du)
-BuildRequires:  golang(github.com/calmh/luhn)
 BuildRequires:  golang(github.com/calmh/xdr)
 BuildRequires:  golang(github.com/ccding/go-stun/stun)
 BuildRequires:  golang(github.com/chmduquesne/rollinghash/adler32)
@@ -91,7 +95,6 @@ BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/storage)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/util)
 BuildRequires:  golang(github.com/thejerf/suture)
 BuildRequires:  golang(github.com/vitrun/qart)
-BuildRequires:  golang(github.com/xtaci/kcp-go)
 BuildRequires:  golang(github.com/xtaci/smux)
 BuildRequires:  golang(golang.org/x/net/context)
 BuildRequires:  golang(golang.org/x/net/ipv4)
@@ -129,10 +132,10 @@ Provides:       %{long_name}-devel = %{version}-%{release}
 BuildArch:      noarch
 
 Requires:       golang(github.com/AudriusButkevicius/go-nat-pmp)
+Requires:       golang(github.com/AudriusButkevicius/kcp-go)
 Requires:       golang(github.com/AudriusButkevicius/pfilter)
 Requires:       golang(github.com/bkaradzic/go-lz4)
 Requires:       golang(github.com/calmh/du)
-Requires:       golang(github.com/calmh/luhn)
 Requires:       golang(github.com/calmh/xdr)
 Requires:       golang(github.com/ccding/go-stun/stun)
 Requires:       golang(github.com/chmduquesne/rollinghash/adler32)
@@ -153,7 +156,6 @@ Requires:       golang(github.com/syndtr/goleveldb/leveldb/storage)
 Requires:       golang(github.com/syndtr/goleveldb/leveldb/util)
 Requires:       golang(github.com/thejerf/suture)
 Requires:       golang(github.com/vitrun/qart)
-Requires:       golang(github.com/xtaci/kcp-go)
 Requires:       golang(github.com/xtaci/smux)
 Requires:       golang(golang.org/x/net/context)
 Requires:       golang(golang.org/x/net/ipv4)
@@ -197,10 +199,10 @@ Provides:       golang(%{import_path}/lib/weakhash) = %{version}-%{release}
 %if 0%{?with_bundled}
 Provides:       bundled(golang(github.com/AudriusButkevicius/cli)) = 7f561c78b5a4aad858d9fd550c92b5da6d55efbb
 Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c97607362b2ab5a7839b8d1704f0396b640ca
+Provides:       bundled(golang(github.com/AudriusButkevicius/kcp-go)) = d17218ba2121268b854dd84f2bb54679541c4048
 Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 09b3cfdd04de89f0196caecb0b335d7149a6593a
 Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27ef618c0a95f1ae69dbb0488abc33a
 Provides:       bundled(golang(github.com/calmh/du)) = dd9dc2043353249b2910b29dcfd6f6d4e64f39be
-Provides:       bundled(golang(github.com/calmh/luhn)) = 0c8388ff95fa92d4094011e5a04fc99dea3d1632
 Provides:       bundled(golang(github.com/calmh/xdr)) = 08e072f9cb164f943a92eb59f90f3abc64ac6e8f
 Provides:       bundled(golang(github.com/ccding/go-stun/stun)) = 04a4eed61c57ecc9903f8983d1d2c17b88d2e9e1
 Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = 043b8fdecc9816f0011a056f6d92f9a091ab63dd
@@ -241,11 +243,11 @@ Provides:       bundled(golang(github.com/remyoudompheng/bigfft)) = a8e77ddfb932
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 341000892f3dd25f440e6231e8533eb3688ed7ec
 Provides:       bundled(golang(github.com/stathat/go)) = 74669b9f388d9d788c97399a0824adbfee78400e
 Provides:       bundled(golang(github.com/syndtr/goleveldb/leveldb)) = 3c5717caf1475fd25964109a0fc640bd150fce43
+Provides:       bundled(golang(github.com/templexxx/xor)) = 42f9c041c330b560afb991153bf183c25444bcdc
 Provides:       bundled(golang(github.com/thejerf/suture)) = 0ac47afae95ad5bc5184ed346bc945168e883f5d
 Provides:       bundled(golang(github.com/vitrun/qart/coding)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
 Provides:       bundled(golang(github.com/vitrun/qart/gf256)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
 Provides:       bundled(golang(github.com/vitrun/qart/qr)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
-Provides:       bundled(golang(github.com/xtaci/kcp-go)) = 0b0731ef3f184a8985edcb4ca26a4b0598c6dc1a
 Provides:       bundled(golang(github.com/xtaci/smux)) = 0f6b9aaecaaf354357adc7def9239011ad276776
 Provides:       bundled(golang(golang.org/x/crypto/bcrypt)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
 Provides:       bundled(golang(golang.org/x/crypto/blowfish)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
@@ -348,6 +350,9 @@ This package contains the main syncthing server tools:
 %else
 %patch0 -p1
 %endif
+
+# re-import luhn code
+%patch2 -p1
 
 
 %build
@@ -642,6 +647,10 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Wed Sep 20 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.38-1
+- Update to version 0.14.38.
+- Add patch to use internal luhn version again.
+
 * Mon Sep 18 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.37-2
 - Rebuild for updated dependencies, fixing crashes.
 
