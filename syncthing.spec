@@ -35,15 +35,15 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          5aade9a4a5506e5b71b2a9ab863790dca488700e
+%global commit          5f8c0ca932e8d737a0616ec449e82cff3732afcf
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 5aade9a4a5506e5b71b2a9ab863790dca488700e == version 0.14.39
+# commit 5f8c0ca932e8d737a0616ec449e82cff3732afcf == version 0.14.39
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.39
+Version:        0.14.40
 Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
@@ -65,7 +65,7 @@ BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  systemd
 %{?systemd_requires}
 
-%if ! 0%{?with_bundled}
+%if 0%{?with_check} && ! 0%{?with_bundled}
 BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
 BuildRequires:  golang(github.com/AudriusButkevicius/kcp-go)
 BuildRequires:  golang(github.com/AudriusButkevicius/pfilter)
@@ -92,6 +92,7 @@ BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/util)
 BuildRequires:  golang(github.com/thejerf/suture)
 BuildRequires:  golang(github.com/vitrun/qart)
 BuildRequires:  golang(github.com/xtaci/smux)
+BuildRequires:  golang(github.com/zillode/notify)
 BuildRequires:  golang(golang.org/x/net/context)
 BuildRequires:  golang(golang.org/x/net/ipv4)
 BuildRequires:  golang(golang.org/x/net/ipv6)
@@ -153,6 +154,7 @@ Requires:       golang(github.com/syndtr/goleveldb/leveldb/util)
 Requires:       golang(github.com/thejerf/suture)
 Requires:       golang(github.com/vitrun/qart)
 Requires:       golang(github.com/xtaci/smux)
+Requires:       golang(github.com/zillode/notify)
 Requires:       golang(golang.org/x/net/context)
 Requires:       golang(golang.org/x/net/ipv4)
 Requires:       golang(golang.org/x/net/ipv6)
@@ -190,12 +192,13 @@ Provides:       golang(%{import_path}/lib/upgrade) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/upnp) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/util) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/versioner) = %{version}-%{release}
+Provides:       golang(%{import_path}/lib/watchaggregator) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/weakhash) = %{version}-%{release}
 
 %if 0%{?with_bundled}
 Provides:       bundled(golang(github.com/AudriusButkevicius/cli)) = 7f561c78b5a4aad858d9fd550c92b5da6d55efbb
 Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c97607362b2ab5a7839b8d1704f0396b640ca
-Provides:       bundled(golang(github.com/AudriusButkevicius/kcp-go)) = d17218ba2121268b854dd84f2bb54679541c4048
+Provides:       bundled(golang(github.com/AudriusButkevicius/kcp-go)) = 8ae5f528469c6ab76110f41eb7a51341b7efb946
 Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 09b3cfdd04de89f0196caecb0b335d7149a6593a
 Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27ef618c0a95f1ae69dbb0488abc33a
 Provides:       bundled(golang(github.com/calmh/du)) = dd9dc2043353249b2910b29dcfd6f6d4e64f39be
@@ -225,7 +228,6 @@ Provides:       bundled(golang(github.com/jackpal/gateway)) = 5795ac81146e01d3fa
 Provides:       bundled(golang(github.com/kardianos/osext)) = 9d302b58e975387d0b4d9be876622c86cefe64be
 Provides:       bundled(golang(github.com/kballard/go-shellquote)) = cd60e84ee657ff3dc51de0b4f55dd299a3e136f2
 Provides:       bundled(golang(github.com/klauspost/cpuid)) = 09cded8978dc9e80714c4d85b0322337b0a1e5e0
-Provides:       bundled(golang(github.com/klauspost/reedsolomon)) = 5abf0ee302ccf4834e84f63ff74eca3e8b88e4e2
 Provides:       bundled(golang(github.com/lib/pq)) = 2704adc878c21e1329f46f6e56a1c387d788ff94
 Provides:       bundled(golang(github.com/minio/sha256-simd)) = 6124d070eb4e7001c244b6ccc282620a5dce44a0
 Provides:       bundled(golang(github.com/onsi/ginkgo)) = 77a8c1e5c40d6bb6c5eb4dd4bdce9763564f6298
@@ -239,12 +241,16 @@ Provides:       bundled(golang(github.com/remyoudompheng/bigfft)) = a8e77ddfb932
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 341000892f3dd25f440e6231e8533eb3688ed7ec
 Provides:       bundled(golang(github.com/stathat/go)) = 74669b9f388d9d788c97399a0824adbfee78400e
 Provides:       bundled(golang(github.com/syndtr/goleveldb/leveldb)) = 3c5717caf1475fd25964109a0fc640bd150fce43
+Provides:       bundled(golang(github.com/templexxx/cpufeat)) = 3794dfbfb04749f896b521032f69383f24c3687e
+Provides:       bundled(golang(github.com/templexxx/reedsolomon)) = 7092926d7d05c415fabb892b1464a03f8228ab80
 Provides:       bundled(golang(github.com/templexxx/xor)) = 42f9c041c330b560afb991153bf183c25444bcdc
 Provides:       bundled(golang(github.com/thejerf/suture)) = 0ac47afae95ad5bc5184ed346bc945168e883f5d
+Provides:       bundled(golang(github.com/tjfoc/gmsm/sm4)) = 0f4904804c0f24f1784e10195a4144fcffa86a85
 Provides:       bundled(golang(github.com/vitrun/qart/coding)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
 Provides:       bundled(golang(github.com/vitrun/qart/gf256)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
 Provides:       bundled(golang(github.com/vitrun/qart/qr)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
 Provides:       bundled(golang(github.com/xtaci/smux)) = 0f6b9aaecaaf354357adc7def9239011ad276776
+Provides:       bundled(golang(github.com/zillode/notify)) = 54e3093eb7377fd139c4605f475cc78e83610b9d
 Provides:       bundled(golang(golang.org/x/crypto/bcrypt)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
 Provides:       bundled(golang(golang.org/x/crypto/blowfish)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
 Provides:       bundled(golang(golang.org/x/crypto/cast5)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
@@ -566,6 +572,7 @@ export GOPATH=%{buildroot}/%{gopath}:$(pwd)/vendor:%{gopath}
 # https://github.com/syncthing/syncthing/issues/4351
 %gotest %{import_path}/lib/versioner || :
 
+%gotest %{import_path}/lib/watchaggregator
 %gotest %{import_path}/lib/weakhash
 
 # Clean up after the tests
@@ -640,6 +647,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Tue Nov 07 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.40-1
+- Update to version 0.14.40.
+
 * Wed Oct 11 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.39-1
 - Update to version 0.14.39.
 

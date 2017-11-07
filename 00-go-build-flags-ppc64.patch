@@ -1,8 +1,8 @@
 diff --git a/build.go b/build.go
-index d8e7f00..bdceb0d 100644
+index 3744feb..7a4494a 100644
 --- a/build.go
 +++ b/build.go
-@@ -424,9 +424,16 @@ func build(target target, tags []string) {
+@@ -443,9 +443,16 @@ func build(target target, tags []string) {
  	lazyRebuildAssets()
  
  	tags = append(target.tags, tags...)
@@ -15,12 +15,12 @@ index d8e7f00..bdceb0d 100644
 +	ldflags := fmt.Sprintf("%s %s -B 0x%s -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'",
 +		ldflags(), os.Getenv("LDFLAGS"), build_id)
 +
-+    args := []string{"build", "-compiler", "gc", "-ldflags", ldflags, "-a", "-v", "-x"}
++	args := []string{"build", "-compiler", "gc", "-ldflags", ldflags, "-a", "-v", "-x"}
 +
- 	if len(tags) > 0 {
- 		args = append(args, "-tags", strings.Join(tags, " "))
+ 	if pkgdir != "" {
+ 		args = append(args, "-pkgdir", pkgdir)
  	}
-@@ -702,11 +709,10 @@ func ldflags() string {
+@@ -724,11 +731,10 @@ func ldflags() string {
  	}
  
  	b := new(bytes.Buffer)
