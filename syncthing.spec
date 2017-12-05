@@ -20,11 +20,22 @@
 # Build server tools
 %global with_tools 1
 
+# Build CLI program
+%global with_cli 1
+
 
 %if 0%{?with_debug}
 %global _dwz_low_mem_die_limit 0
 %else
 %global debug_package   %{nil}
+%endif
+
+%if ! 0%{?gobuild:1}
+%ifnarch ppc64
+%global gobuild(o:) go build -buildmode pie -compiler gc -tags=rpm_crashtraceback -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld '" -a -v -x %{?**};
+%else
+%global gobuild(o:) go build -compiler gc -tags=rpm_crashtraceback -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld '" -a -v -x %{?**};
+%endif
 %endif
 
 %global provider        github
@@ -35,15 +46,15 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          5f8c0ca932e8d737a0616ec449e82cff3732afcf
+%global commit          99b00b6a5e723f7b8214273d694d4ffc7a609bbc
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 5f8c0ca932e8d737a0616ec449e82cff3732afcf == version 0.14.39
+# commit 99b00b6a5e723f7b8214273d694d4ffc7a609bbc == version 0.14.41
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.40
+Version:        0.14.41
 Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
@@ -199,11 +210,11 @@ Provides:       golang(%{import_path}/lib/weakhash) = %{version}-%{release}
 Provides:       bundled(golang(github.com/AudriusButkevicius/cli)) = 7f561c78b5a4aad858d9fd550c92b5da6d55efbb
 Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c97607362b2ab5a7839b8d1704f0396b640ca
 Provides:       bundled(golang(github.com/AudriusButkevicius/kcp-go)) = 8ae5f528469c6ab76110f41eb7a51341b7efb946
-Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 09b3cfdd04de89f0196caecb0b335d7149a6593a
+Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 56143fe9cebe95636de1275acf30fcca36a1383d
 Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27ef618c0a95f1ae69dbb0488abc33a
 Provides:       bundled(golang(github.com/calmh/du)) = dd9dc2043353249b2910b29dcfd6f6d4e64f39be
 Provides:       bundled(golang(github.com/calmh/xdr)) = 08e072f9cb164f943a92eb59f90f3abc64ac6e8f
-Provides:       bundled(golang(github.com/ccding/go-stun/stun)) = 04a4eed61c57ecc9903f8983d1d2c17b88d2e9e1
+Provides:       bundled(golang(github.com/ccding/go-stun/stun)) = 9d33469f1f20a1674659be94ac9ca94ab5f06f58
 Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = 043b8fdecc9816f0011a056f6d92f9a091ab63dd
 Provides:       bundled(golang(github.com/cznic/b)) = aaaa43c92e509a827e63540510bc94c3003ef2e1
 Provides:       bundled(golang(github.com/cznic/fileutil)) = 90cf820aafe8f7df39416fdbb932029ff99bd1ab
@@ -240,7 +251,7 @@ Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = 1f30fe9094a513
 Provides:       bundled(golang(github.com/remyoudompheng/bigfft)) = a8e77ddfb93284b9d58881f597c820a2875af336
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 341000892f3dd25f440e6231e8533eb3688ed7ec
 Provides:       bundled(golang(github.com/stathat/go)) = 74669b9f388d9d788c97399a0824adbfee78400e
-Provides:       bundled(golang(github.com/syndtr/goleveldb/leveldb)) = 3c5717caf1475fd25964109a0fc640bd150fce43
+Provides:       bundled(golang(github.com/syndtr/goleveldb/leveldb)) = 549b6d6b1c0419617182954dd77770f2e2685ed5
 Provides:       bundled(golang(github.com/templexxx/cpufeat)) = 3794dfbfb04749f896b521032f69383f24c3687e
 Provides:       bundled(golang(github.com/templexxx/reedsolomon)) = 7092926d7d05c415fabb892b1464a03f8228ab80
 Provides:       bundled(golang(github.com/templexxx/xor)) = 42f9c041c330b560afb991153bf183c25444bcdc
@@ -343,6 +354,26 @@ This package contains the main syncthing server tools:
 %endif
 
 
+%if 0%{?with_cli}
+%package        cli
+Summary:        Continuous File Synchronization (CLI)
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%if ! 0%{?with_bundled}
+BuildRequires:  golang(github.com/AudriusButkevicius/cli)
+%endif
+
+%description    cli
+Syncthing replaces other file synchronization services with something
+open, trustworthy and decentralized. Your data is your data alone and
+you deserve to choose where it is stored, if it is shared with some
+third party and how it's transmitted over the Internet. Using syncthing,
+that control is returned to you.
+
+This package contains the CLI program.
+%endif
+
+
 %prep
 %setup -q -n syncthing
 
@@ -399,6 +430,10 @@ go run build.go -no-upgrade build strelaypoolsrv
 
 popd
 
+%if 0%{?with_cli}
+%gobuild -o stcli %{import_path}/cmd/stcli
+%endif
+
 # remove build script so it doesn't get picked up later
 %if 0%{?with_devel}
 rm build.go
@@ -415,6 +450,10 @@ cp -pav ./syncthing %{buildroot}/%{_bindir}/
 cp -pav ./stdiscosrv %{buildroot}/%{_bindir}/
 cp -pav ./strelaysrv %{buildroot}/%{_bindir}/
 cp -pav ./strelaypoolsrv %{buildroot}/%{_bindir}/
+%endif
+
+%if 0%{?with_cli}
+cp -pav ./stcli %{buildroot}/%{_bindir}/
 %endif
 
 # install man pages
@@ -631,6 +670,12 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 %endif
 
 
+%if 0%{?with_cli}
+%files cli
+%{_bindir}/stcli
+%endif
+
+
 %if 0%{?with_devel}
 %files devel -f devel.file-list
 %license LICENSE
@@ -647,6 +692,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Tue Dec 05 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.41-1
+- Update to version 0.14.41.
+
 * Tue Nov 07 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.40-1
 - Update to version 0.14.40.
 
