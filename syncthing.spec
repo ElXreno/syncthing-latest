@@ -46,15 +46,15 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          99b00b6a5e723f7b8214273d694d4ffc7a609bbc
+%global commit          8fd2937a583edc39f4a65eb47063b2ddcb407728
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 99b00b6a5e723f7b8214273d694d4ffc7a609bbc == version 0.14.41
+# commit 8fd2937a583edc39f4a65eb47063b2ddcb407728 == version 0.14.41
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.41
+Version:        0.14.42
 Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
@@ -210,11 +210,11 @@ Provides:       golang(%{import_path}/lib/weakhash) = %{version}-%{release}
 Provides:       bundled(golang(github.com/AudriusButkevicius/cli)) = 7f561c78b5a4aad858d9fd550c92b5da6d55efbb
 Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c97607362b2ab5a7839b8d1704f0396b640ca
 Provides:       bundled(golang(github.com/AudriusButkevicius/kcp-go)) = 8ae5f528469c6ab76110f41eb7a51341b7efb946
-Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 56143fe9cebe95636de1275acf30fcca36a1383d
+Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 9dca34a5b530bfc9843fa8aa2ff08ff9821032cb
 Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27ef618c0a95f1ae69dbb0488abc33a
 Provides:       bundled(golang(github.com/calmh/du)) = dd9dc2043353249b2910b29dcfd6f6d4e64f39be
 Provides:       bundled(golang(github.com/calmh/xdr)) = 08e072f9cb164f943a92eb59f90f3abc64ac6e8f
-Provides:       bundled(golang(github.com/ccding/go-stun/stun)) = 9d33469f1f20a1674659be94ac9ca94ab5f06f58
+Provides:       bundled(golang(github.com/ccding/go-stun)) = d9bbe8f8fa7bf7ed03e6cfc6a2796bb36139e1f4
 Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = 043b8fdecc9816f0011a056f6d92f9a091ab63dd
 Provides:       bundled(golang(github.com/cznic/b)) = aaaa43c92e509a827e63540510bc94c3003ef2e1
 Provides:       bundled(golang(github.com/cznic/fileutil)) = 90cf820aafe8f7df39416fdbb932029ff99bd1ab
@@ -692,6 +692,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Tue Dec 26 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.42-1
+- Update to version 0.14.42.
+
 * Tue Dec 05 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.41-1
 - Update to version 0.14.41.
 
