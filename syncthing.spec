@@ -1,41 +1,22 @@
 # Generate devel rpm
 %global with_devel 1
-
 # Build project from bundled dependencies
-%if 0%{?rhel}
-%global with_bundled 1
-%else
 %global with_bundled 0
-%endif
-
 # Build with debug info rpm
 %global with_debug 1
-
 # Run tests in check section
 %global with_check 1
-
 # Generate unit-test rpm
 %global with_unit_test 1
-
 # Build server tools
 %global with_tools 1
-
 # Build CLI program
 %global with_cli 1
-
 
 %if 0%{?with_debug}
 %global _dwz_low_mem_die_limit 0
 %else
 %global debug_package   %{nil}
-%endif
-
-%if ! 0%{?gobuild:1}
-%ifnarch ppc64
-%global gobuild(o:) go build -buildmode pie -compiler gc -tags=rpm_crashtraceback -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld '" -a -v -x %{?**};
-%else
-%global gobuild(o:) go build -compiler gc -tags=rpm_crashtraceback -ldflags "${LDFLAGS:-} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \\n') -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld '" -a -v -x %{?**};
-%endif
 %endif
 
 %global provider        github
@@ -46,15 +27,15 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          8fd2937a583edc39f4a65eb47063b2ddcb407728
+%global commit          a9f0659f2f4bf910f82b652fd27a864074ec7ab8
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 8fd2937a583edc39f4a65eb47063b2ddcb407728 == version 0.14.41
+# commit a9f0659f2f4bf910f82b652fd27a864074ec7ab8 == version 0.14.43
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.42
+Version:        0.14.43
 Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
@@ -78,7 +59,6 @@ BuildRequires:  systemd
 
 %if 0%{?with_check} && ! 0%{?with_bundled}
 BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
-BuildRequires:  golang(github.com/AudriusButkevicius/kcp-go)
 BuildRequires:  golang(github.com/AudriusButkevicius/pfilter)
 BuildRequires:  golang(github.com/bkaradzic/go-lz4)
 BuildRequires:  golang(github.com/calmh/du)
@@ -102,6 +82,7 @@ BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/storage)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/util)
 BuildRequires:  golang(github.com/thejerf/suture)
 BuildRequires:  golang(github.com/vitrun/qart)
+BuildRequires:  golang(github.com/xtaci/kcp-go)
 BuildRequires:  golang(github.com/xtaci/smux)
 BuildRequires:  golang(github.com/zillode/notify)
 BuildRequires:  golang(golang.org/x/net/context)
@@ -122,6 +103,10 @@ Provides:       bundled(bootstrap) = 3.3.6
 Provides:       bundled(font-awesome) = 4.5.0
 Provides:       bundled(jquery) = 2.2.2
 
+# an inotify filesystem watcher is integrated with syncthing now
+Provides:       syncthing-inotify = 0.8.7-5
+Obsoletes:      syncthing-inotify < 0.8.7-5
+
 
 %description
 Syncthing replaces other file synchronization services with something
@@ -140,7 +125,6 @@ Provides:       %{long_name}-devel = %{version}-%{release}
 BuildArch:      noarch
 
 Requires:       golang(github.com/AudriusButkevicius/go-nat-pmp)
-Requires:       golang(github.com/AudriusButkevicius/kcp-go)
 Requires:       golang(github.com/AudriusButkevicius/pfilter)
 Requires:       golang(github.com/bkaradzic/go-lz4)
 Requires:       golang(github.com/calmh/du)
@@ -164,6 +148,7 @@ Requires:       golang(github.com/syndtr/goleveldb/leveldb/storage)
 Requires:       golang(github.com/syndtr/goleveldb/leveldb/util)
 Requires:       golang(github.com/thejerf/suture)
 Requires:       golang(github.com/vitrun/qart)
+Requires:       golang(github.com/xtaci/kcp-go)
 Requires:       golang(github.com/xtaci/smux)
 Requires:       golang(github.com/zillode/notify)
 Requires:       golang(golang.org/x/net/context)
@@ -205,89 +190,6 @@ Provides:       golang(%{import_path}/lib/util) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/versioner) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/watchaggregator) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/weakhash) = %{version}-%{release}
-
-%if 0%{?with_bundled}
-Provides:       bundled(golang(github.com/AudriusButkevicius/cli)) = 7f561c78b5a4aad858d9fd550c92b5da6d55efbb
-Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c97607362b2ab5a7839b8d1704f0396b640ca
-Provides:       bundled(golang(github.com/AudriusButkevicius/kcp-go)) = 8ae5f528469c6ab76110f41eb7a51341b7efb946
-Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 9dca34a5b530bfc9843fa8aa2ff08ff9821032cb
-Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27ef618c0a95f1ae69dbb0488abc33a
-Provides:       bundled(golang(github.com/calmh/du)) = dd9dc2043353249b2910b29dcfd6f6d4e64f39be
-Provides:       bundled(golang(github.com/calmh/xdr)) = 08e072f9cb164f943a92eb59f90f3abc64ac6e8f
-Provides:       bundled(golang(github.com/ccding/go-stun)) = d9bbe8f8fa7bf7ed03e6cfc6a2796bb36139e1f4
-Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = 043b8fdecc9816f0011a056f6d92f9a091ab63dd
-Provides:       bundled(golang(github.com/cznic/b)) = aaaa43c92e509a827e63540510bc94c3003ef2e1
-Provides:       bundled(golang(github.com/cznic/fileutil)) = 90cf820aafe8f7df39416fdbb932029ff99bd1ab
-Provides:       bundled(golang(github.com/cznic/internal/buffer)) = e5e1c3e9165d0a72507c2bbb0ffac1c02b8d3f7c
-Provides:       bundled(golang(github.com/cznic/internal/file)) = e5e1c3e9165d0a72507c2bbb0ffac1c02b8d3f7c
-Provides:       bundled(golang(github.com/cznic/internal/slice)) = e5e1c3e9165d0a72507c2bbb0ffac1c02b8d3f7c
-Provides:       bundled(golang(github.com/cznic/lldb)) = bea8611dd5c407f3c5eab9f9c68e887a27dc6f0e
-Provides:       bundled(golang(github.com/cznic/mathutil)) = 1447ad269d64ca91aa8d7079baa40b6fc8b965e7
-Provides:       bundled(golang(github.com/cznic/ql)) = bd2055c7674ac80c520815dfe85082844cd246d4
-Provides:       bundled(golang(github.com/cznic/sortutil)) = 4c7342852e65c2088c981288f2c5610d10b9f7f4
-Provides:       bundled(golang(github.com/cznic/strutil)) = 43a89592ed56c227c7fdb1fcaf7d1d08be02ec54
-Provides:       bundled(golang(github.com/cznic/zappy)) = 2533cb5b45cc6c07421468ce262899ddc9d53fb7
-Provides:       bundled(golang(github.com/d4l3k/messagediff)) = 2fe2a1d40db6c23619ae5bcc8f80a5b43c40581b
-Provides:       bundled(golang(github.com/edsrzf/mmap-go)) = 0bce6a6887123b67a60366d2c9fe2dfb74289d2e
-Provides:       bundled(golang(github.com/gobwas/glob)) = 51eb1ee00b6d931c66d229ceeb7c31b985563420
-Provides:       bundled(golang(github.com/gogo/protobuf)) = efccd33a0c20aa078705571d5ddbfa14c8395a63
-Provides:       bundled(golang(github.com/golang/groupcache/lru)) = 72d04f9fcdec7d3821820cc4a6f150eae553639a
-Provides:       bundled(golang(github.com/golang/protobuf/proto)) = 2bba0603135d7d7f5cb73b2125beeda19c09f4ef
-Provides:       bundled(golang(github.com/golang/protobuf/ptypes/any)) = 2bba0603135d7d7f5cb73b2125beeda19c09f4ef
-Provides:       bundled(golang(github.com/golang/snappy)) = 553a641470496b2327abcac10b36396bd98e45c9
-Provides:       bundled(golang(github.com/jackpal/gateway)) = 5795ac81146e01d3fab7bcf21c043c3d6a32b006
-Provides:       bundled(golang(github.com/kardianos/osext)) = 9d302b58e975387d0b4d9be876622c86cefe64be
-Provides:       bundled(golang(github.com/kballard/go-shellquote)) = cd60e84ee657ff3dc51de0b4f55dd299a3e136f2
-Provides:       bundled(golang(github.com/klauspost/cpuid)) = 09cded8978dc9e80714c4d85b0322337b0a1e5e0
-Provides:       bundled(golang(github.com/lib/pq)) = 2704adc878c21e1329f46f6e56a1c387d788ff94
-Provides:       bundled(golang(github.com/minio/sha256-simd)) = 6124d070eb4e7001c244b6ccc282620a5dce44a0
-Provides:       bundled(golang(github.com/onsi/ginkgo)) = 77a8c1e5c40d6bb6c5eb4dd4bdce9763564f6298
-Provides:       bundled(golang(github.com/onsi/gomega)) = 334b8f472b3af5d541c5642701c1e29e2126f486
-Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 0fd242da7906550802871efe101abfdb1cc550a8
-Provides:       bundled(golang(github.com/oschwald/maxminddb-golang)) = 697da8075d2061aa8ed639346443f5d3e8c80b30
-Provides:       bundled(golang(github.com/petermattis/goid)) = caab6446a35a918488a0f52d4b0bd088a60f3511
-Provides:       bundled(golang(github.com/pkg/errors)) = ff09b135c25aae272398c51a07235b90a75aa4f0
-Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = 1f30fe9094a513ce4c700b9a54458bbb0c96996c
-Provides:       bundled(golang(github.com/remyoudompheng/bigfft)) = a8e77ddfb93284b9d58881f597c820a2875af336
-Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 341000892f3dd25f440e6231e8533eb3688ed7ec
-Provides:       bundled(golang(github.com/stathat/go)) = 74669b9f388d9d788c97399a0824adbfee78400e
-Provides:       bundled(golang(github.com/syndtr/goleveldb/leveldb)) = 549b6d6b1c0419617182954dd77770f2e2685ed5
-Provides:       bundled(golang(github.com/templexxx/cpufeat)) = 3794dfbfb04749f896b521032f69383f24c3687e
-Provides:       bundled(golang(github.com/templexxx/reedsolomon)) = 7092926d7d05c415fabb892b1464a03f8228ab80
-Provides:       bundled(golang(github.com/templexxx/xor)) = 42f9c041c330b560afb991153bf183c25444bcdc
-Provides:       bundled(golang(github.com/thejerf/suture)) = 0ac47afae95ad5bc5184ed346bc945168e883f5d
-Provides:       bundled(golang(github.com/tjfoc/gmsm/sm4)) = 0f4904804c0f24f1784e10195a4144fcffa86a85
-Provides:       bundled(golang(github.com/vitrun/qart/coding)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
-Provides:       bundled(golang(github.com/vitrun/qart/gf256)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
-Provides:       bundled(golang(github.com/vitrun/qart/qr)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
-Provides:       bundled(golang(github.com/xtaci/smux)) = 0f6b9aaecaaf354357adc7def9239011ad276776
-Provides:       bundled(golang(github.com/zillode/notify)) = 54e3093eb7377fd139c4605f475cc78e83610b9d
-Provides:       bundled(golang(golang.org/x/crypto/bcrypt)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/crypto/blowfish)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/crypto/cast5)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/crypto/pbkdf2)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/crypto/salsa20)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/crypto/tea)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/crypto/twofish)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/crypto/xtea)) = c78caca803c95773f48a844d3dcab04b9bc4d6dd
-Provides:       bundled(golang(golang.org/x/net/bpf)) = ffcf1bedda3b04ebb15a168a59800a73d6dc0f4d
-Provides:       bundled(golang(golang.org/x/net/context)) = ffcf1bedda3b04ebb15a168a59800a73d6dc0f4d
-Provides:       bundled(golang(golang.org/x/net/internal/iana)) = ffcf1bedda3b04ebb15a168a59800a73d6dc0f4d
-Provides:       bundled(golang(golang.org/x/net/internal/netreflect)) = ffcf1bedda3b04ebb15a168a59800a73d6dc0f4d
-Provides:       bundled(golang(golang.org/x/net/ipv4)) = ffcf1bedda3b04ebb15a168a59800a73d6dc0f4d
-Provides:       bundled(golang(golang.org/x/net/ipv6)) = ffcf1bedda3b04ebb15a168a59800a73d6dc0f4d
-Provides:       bundled(golang(golang.org/x/net/proxy)) = ffcf1bedda3b04ebb15a168a59800a73d6dc0f4d
-Provides:       bundled(golang(golang.org/x/sys/unix)) = f3918c30c5c2cb527c0b071a27c35120a6c0719a
-Provides:       bundled(golang(golang.org/x/sys/windows)) = 493114f68206f85e7e333beccfabc11e98cba8dd
-Provides:       bundled(golang(golang.org/x/text/internal/gen)) = f4b4367115ec2de254587813edaa901bc1c723a8
-Provides:       bundled(golang(golang.org/x/text/internal/triegen)) = f4b4367115ec2de254587813edaa901bc1c723a8
-Provides:       bundled(golang(golang.org/x/text/internal/ucd)) = f4b4367115ec2de254587813edaa901bc1c723a8
-Provides:       bundled(golang(golang.org/x/text/transform)) = f4b4367115ec2de254587813edaa901bc1c723a8
-Provides:       bundled(golang(golang.org/x/text/unicode/cldr)) = f4b4367115ec2de254587813edaa901bc1c723a8
-Provides:       bundled(golang(golang.org/x/text/unicode/norm)) = f4b4367115ec2de254587813edaa901bc1c723a8
-Provides:       bundled(golang(golang.org/x/time/rate)) = f51c12702a4d776e4c1fa9b0fabab841babae631
-Provides:       bundled(golang(gopkg.in/yaml.v2)) = a3f3340b5840cee44f372bddb5880fcbc419b46a
-%endif
 
 %description    devel
 Syncthing replaces other file synchronization services with something
@@ -386,16 +288,8 @@ This package contains the CLI program.
 
 
 %build
-%if ! 0%{?with_bundled}
 # remove bundled libraries
 rm -r vendor
-%endif
-
-# Replace usage of "context" package (go 1.7+ only) with the old
-# "golang.org/x/net/context" package if only an old compiler is available
-%if 0%{?fedora} == 24 || 0%{?rhel}
-sed -i 's/"context"/"golang.org\/x\/net\/context"/' cmd/syncthing/*.go lib/*/*.go
-%endif
 
 # prepare build environment
 mkdir -p ./_build/src/%{provider}.%{provider_tld}/%{project}
@@ -435,9 +329,7 @@ popd
 %endif
 
 # remove build script so it doesn't get picked up later
-%if 0%{?with_devel}
 rm build.go
-%endif
 
 
 %install
@@ -480,7 +372,7 @@ cp -pav etc/linux-systemd/user/syncthing.service %{buildroot}/%{_userunitdir}/
 
 # install systemd preset disabling the service per default
 mkdir -p %{buildroot}/%{_prefix}/lib/systemd/user-preset
-echo "disable syncthing*" > %{buildroot}/%{_prefix}/lib/systemd/user-preset/90-syncthing.preset
+echo "disable syncthing*" > %{buildroot}/%{_userpresetdir}/90-syncthing.preset
 
 
 # Unmark source files as executable
@@ -559,16 +451,7 @@ sort -u -o unit-test-devel.file-list unit-test-devel.file-list
 
 %check
 %if 0%{?with_check} && 0%{?with_unit_test} && 0%{?with_devel}
-%if ! 0%{?with_bundled}
 export GOPATH=%{buildroot}/%{gopath}:%{gopath}
-%else
-# Since we aren't packaging up the vendor directory we need to link
-# back to it somehow. Hack it up so that we can add the vendor
-# directory from BUILD dir as a gopath to be searched when executing
-# tests from the BUILDROOT dir.
-ln -s ./ ./vendor/src # ./vendor/src -> ./vendor
-export GOPATH=%{buildroot}/%{gopath}:$(pwd)/vendor:%{gopath}
-%endif
 
 %if ! 0%{?gotest:1}
 %global gotest go test
@@ -652,8 +535,7 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 %{_unitdir}/syncthing@.service
 %{_unitdir}/syncthing-resume.service
 %{_userunitdir}/syncthing.service
-
-%{_prefix}/lib/systemd/user-preset/90-syncthing.preset
+%{_userpresetdir}/90-syncthing.preset
 
 
 %if 0%{?with_tools}
@@ -692,6 +574,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Tue Jan 09 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.43-1
+- Update to version 0.14.43.
+
 * Tue Dec 26 2017 Fabio Valentini <decathorpe@gmail.com> - 0.14.42-1
 - Update to version 0.14.42.
 
