@@ -36,7 +36,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        0.14.43
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
 License:        MPLv2.0 and MIT and OFL
@@ -574,6 +574,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.14.43-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Tue Jan 09 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.43-1
 - Update to version 0.14.43.
 
