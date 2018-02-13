@@ -27,16 +27,16 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          a9f0659f2f4bf910f82b652fd27a864074ec7ab8
+%global commit          27d5b17096847d16d01421c30151969adda36628
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit a9f0659f2f4bf910f82b652fd27a864074ec7ab8 == version 0.14.43
+# commit 27d5b17096847d16d01421c30151969adda36628 == version 0.14.44
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.43
-Release:        2%{?dist}
+Version:        0.14.44
+Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
 License:        MPLv2.0 and MIT and OFL
@@ -48,6 +48,9 @@ Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}
 # and produces debug-enabled binaries for rpm
 Patch0:         00-go-build-flags.patch
 Patch1:         00-go-build-flags-ppc64.patch
+
+# goleveldb in fedora is too old to have the nosync option, so disable it
+Patch2:         02-leveldb-nonosync.patch
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
@@ -72,6 +75,7 @@ BuildRequires:  golang(github.com/jackpal/gateway)
 BuildRequires:  golang(github.com/kardianos/osext)
 BuildRequires:  golang(github.com/kballard/go-shellquote)
 BuildRequires:  golang(github.com/minio/sha256-simd)
+BuildRequires:  golang(github.com/pkg/errors)
 BuildRequires:  golang(github.com/rcrowley/go-metrics)
 BuildRequires:  golang(github.com/sasha-s/go-deadlock)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb)
@@ -85,6 +89,7 @@ BuildRequires:  golang(github.com/vitrun/qart)
 BuildRequires:  golang(github.com/xtaci/kcp-go)
 BuildRequires:  golang(github.com/xtaci/smux)
 BuildRequires:  golang(github.com/zillode/notify)
+BuildRequires:  golang(golang.org/x/crypto/bcrypt)
 BuildRequires:  golang(golang.org/x/net/context)
 BuildRequires:  golang(golang.org/x/net/ipv4)
 BuildRequires:  golang(golang.org/x/net/ipv6)
@@ -138,6 +143,7 @@ Requires:       golang(github.com/jackpal/gateway)
 Requires:       golang(github.com/kardianos/osext)
 Requires:       golang(github.com/kballard/go-shellquote)
 Requires:       golang(github.com/minio/sha256-simd)
+Requires:       golang(github.com/pkg/errors)
 Requires:       golang(github.com/rcrowley/go-metrics)
 Requires:       golang(github.com/sasha-s/go-deadlock)
 Requires:       golang(github.com/syndtr/goleveldb/leveldb)
@@ -157,6 +163,19 @@ Requires:       golang(golang.org/x/net/ipv6)
 Requires:       golang(golang.org/x/net/proxy)
 Requires:       golang(golang.org/x/text/unicode/norm)
 Requires:       golang(golang.org/x/time/rate)
+
+%if %{with_tools}
+Requires:       golang(github.com/AudriusButkevicius/cli)
+Requires:       golang(github.com/cznic/ql)
+Requires:       golang(github.com/golang/groupcache/lru)
+Requires:       golang(github.com/lib/pq)
+Requires:       golang(github.com/oschwald/geoip2-golang)
+Requires:       golang(github.com/prometheus/client_golang/prometheus)
+%endif
+
+%if %{with_cli}
+Requires:       golang(github.com/AudriusButkevicius/cli)
+%endif
 
 Provides:       golang(%{import_path}/lib/auto) = %{version}-%{release}
 Provides:       golang(%{import_path}/lib/beacon) = %{version}-%{release}
@@ -234,10 +253,10 @@ Summary:        Continuous File Synchronization (server tools)
 
 %if ! 0%{?with_bundled}
 BuildRequires:  golang(github.com/AudriusButkevicius/cli)
-BuildRequires:  golang(github.com/cznic/ql)
 BuildRequires:  golang(github.com/golang/groupcache/lru)
-BuildRequires:  golang(github.com/lib/pq)
 BuildRequires:  golang(github.com/oschwald/geoip2-golang)
+BuildRequires:  golang(github.com/prometheus/client_golang/prometheus)
+BuildRequires:  golang(github.com/prometheus/client_golang/prometheus/promhttp)
 %endif
 
 %description    tools
@@ -286,6 +305,8 @@ This package contains the CLI program.
 %patch0 -p1
 %endif
 
+%patch2 -p1
+
 
 %build
 # remove bundled libraries
@@ -323,6 +344,20 @@ go run build.go -no-upgrade build strelaypoolsrv
 %endif
 
 popd
+
+# TODO: Build process cleanup
+# - drop patch to build.go
+# - build only assets
+# - inject custom upstream build flags here directly
+#pushd $BUILDDIR
+#go run build.go assets
+#popd
+#%%gobuild -o syncthing %%{import_path}/cmd/syncthing # FIXME flags
+#%%if 0%%{?with_tools}
+#%%gobuild -o stdiscosrv %%{import_path}/cmd/stdiscosrv # FIXME flags
+#%%gobuild -o strelaysrv %%{import_path}/cmd/strelaysrv # FIXME flags
+#%%gobuild -o strelaypoolsrv %%{import_path}/cmd/strelaypoolsrv # FIXME flags
+#%%endif
 
 %if 0%{?with_cli}
 %gobuild -o stcli %{import_path}/cmd/stcli
@@ -457,6 +492,7 @@ export GOPATH=%{buildroot}/%{gopath}:%{gopath}
 %global gotest go test
 %endif
 
+%gotest %{import_path}/cmd/stdiscosrv
 %gotest %{import_path}/cmd/syncthing
 %gotest %{import_path}/lib/auto
 %gotest %{import_path}/lib/beacon
@@ -470,9 +506,9 @@ export GOPATH=%{buildroot}/%{gopath}:%{gopath}
 %gotest %{import_path}/lib/ignore
 %gotest %{import_path}/lib/logger
 
-# This test is a bit flaky on some architectures, issue is tracked at:
+# This test used to be a bit flaky on some architectures, issue was tracked at:
 # https://github.com/syncthing/syncthing/issues/4370
-%gotest %{import_path}/lib/model || :
+%gotest %{import_path}/lib/model
 
 %gotest %{import_path}/lib/nat
 %gotest %{import_path}/lib/osutil
@@ -490,9 +526,9 @@ export GOPATH=%{buildroot}/%{gopath}:%{gopath}
 %gotest %{import_path}/lib/upnp
 %gotest %{import_path}/lib/util
 
-# This test is failing randomly right now. Issue is tracked upstream at:
+# This test used to fail randomly. Issue was tracked upstream at:
 # https://github.com/syncthing/syncthing/issues/4351
-%gotest %{import_path}/lib/versioner || :
+%gotest %{import_path}/lib/versioner
 
 %gotest %{import_path}/lib/watchaggregator
 %gotest %{import_path}/lib/weakhash
@@ -574,6 +610,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Tue Feb 13 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.44-1
+- Update to version 0.14.44.
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.14.43-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 

@@ -1,26 +1,25 @@
 diff --git a/build.go b/build.go
-index 3744feb..7a4494a 100644
+index 7d400d6..76bb340 100644
 --- a/build.go
 +++ b/build.go
-@@ -443,9 +443,16 @@ func build(target target, tags []string) {
+@@ -434,10 +434,15 @@ func build(target target, tags []string) {
  	lazyRebuildAssets()
  
  	tags = append(target.tags, tags...)
 +	tags = append(tags, "rpm_crashtraceback")
  
  	rmr(target.BinaryName())
--	args := []string{"build", "-i", "-v", "-ldflags", ldflags()}
-+
+ 
+-	args := []string{"build", "-i", "-v"}
 +	build_id, _ := ioutil.ReadFile("build_id")
-+	ldflags := fmt.Sprintf("%s %s -B 0x%s -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'",
++	fedora_ldflags := fmt.Sprintf("%s %s -B 0x%s -extldflags '-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld'",
 +		ldflags(), os.Getenv("LDFLAGS"), build_id)
 +
-+	args := []string{"build", "-buildmode", "pie", "-compiler", "gc", "-ldflags", ldflags, "-a", "-v", "-x"}
-+
- 	if pkgdir != "" {
- 		args = append(args, "-pkgdir", pkgdir)
- 	}
-@@ -724,11 +731,10 @@ func ldflags() string {
++	args := []string{"build", "-buildmode", "pie", "-compiler", "gc", "-ldflags", fedora_ldflags, "-a", "-v", "-x"}
+ 	args = appendParameters(args, tags, target)
+ 
+ 	os.Setenv("GOOS", goos)
+@@ -736,11 +741,10 @@ func ldflags() string {
  	}
  
  	b := new(bytes.Buffer)

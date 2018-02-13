@@ -1,0 +1,13 @@
+diff --git a/cmd/stdiscosrv/main.go b/cmd/stdiscosrv/main.go
+index b74fcee..346b81b 100644
+--- a/cmd/stdiscosrv/main.go
++++ b/cmd/stdiscosrv/main.go
+@@ -61,7 +61,7 @@ const (
+ // the expense of some memory usage and risk of losing writes in a (system)
+ // crash.
+ var levelDBOptions = &opt.Options{
+-	NoSync:      true,
++//	NoSync:      true,
+ 	WriteBuffer: 32 << 20, // default 4<<20
+ }
+ 
