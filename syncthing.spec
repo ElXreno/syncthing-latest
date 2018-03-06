@@ -27,18 +27,22 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          27d5b17096847d16d01421c30151969adda36628
+%global commit          7a92f6c6b18230f74cc347f937fe81b44da6c9ee
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 27d5b17096847d16d01421c30151969adda36628 == version 0.14.44
+# commit 7a92f6c6b18230f74cc347f937fe81b44da6c9ee == version 0.14.45
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.44
+Version:        0.14.45
 Release:        1%{?dist}
 
-# syncthing (MPLv2.0) bundles angular (MIT), bootstrap (MIT), and font-awesome (MIT/OFL)
+# syncthing (MPLv2.0) bundles
+# - angular (MIT),
+# - bootstrap (MIT),
+# - font-awesome (MIT/OFL), and
+# - moment (MIT)
 License:        MPLv2.0 and MIT and OFL
 
 URL:            https://syncthing.net
@@ -62,11 +66,9 @@ BuildRequires:  systemd
 
 %if 0%{?with_check} && ! 0%{?with_bundled}
 BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
-BuildRequires:  golang(github.com/AudriusButkevicius/pfilter)
 BuildRequires:  golang(github.com/bkaradzic/go-lz4)
 BuildRequires:  golang(github.com/calmh/du)
 BuildRequires:  golang(github.com/calmh/xdr)
-BuildRequires:  golang(github.com/ccding/go-stun/stun)
 BuildRequires:  golang(github.com/chmduquesne/rollinghash/adler32)
 BuildRequires:  golang(github.com/gobwas/glob)
 BuildRequires:  golang(github.com/gogo/protobuf/gogoproto)
@@ -85,9 +87,7 @@ BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/opt)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/storage)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/util)
 BuildRequires:  golang(github.com/thejerf/suture)
-BuildRequires:  golang(github.com/vitrun/qart)
-BuildRequires:  golang(github.com/xtaci/kcp-go)
-BuildRequires:  golang(github.com/xtaci/smux)
+BuildRequires:  golang(github.com/vitrun/qart/qr)
 BuildRequires:  golang(github.com/zillode/notify)
 BuildRequires:  golang(golang.org/x/crypto/bcrypt)
 BuildRequires:  golang(golang.org/x/net/context)
@@ -107,6 +107,9 @@ Provides:       bundled(angular-translate-loader-static-files) = 2.11.0
 Provides:       bundled(bootstrap) = 3.3.6
 Provides:       bundled(font-awesome) = 4.5.0
 Provides:       bundled(jquery) = 2.2.2
+Provides:       bundled(jquery-fancytree) = 2.26.0
+Provides:       bundled(jquery-ui) = 1.12.1
+Provides:       bundled(moment) = 2.19.4
 
 # an inotify filesystem watcher is integrated with syncthing now
 Provides:       syncthing-inotify = 0.8.7-5
@@ -130,11 +133,9 @@ Provides:       %{long_name}-devel = %{version}-%{release}
 BuildArch:      noarch
 
 Requires:       golang(github.com/AudriusButkevicius/go-nat-pmp)
-Requires:       golang(github.com/AudriusButkevicius/pfilter)
 Requires:       golang(github.com/bkaradzic/go-lz4)
 Requires:       golang(github.com/calmh/du)
 Requires:       golang(github.com/calmh/xdr)
-Requires:       golang(github.com/ccding/go-stun/stun)
 Requires:       golang(github.com/chmduquesne/rollinghash/adler32)
 Requires:       golang(github.com/gobwas/glob)
 Requires:       golang(github.com/gogo/protobuf/gogoproto)
@@ -153,9 +154,7 @@ Requires:       golang(github.com/syndtr/goleveldb/leveldb/opt)
 Requires:       golang(github.com/syndtr/goleveldb/leveldb/storage)
 Requires:       golang(github.com/syndtr/goleveldb/leveldb/util)
 Requires:       golang(github.com/thejerf/suture)
-Requires:       golang(github.com/vitrun/qart)
-Requires:       golang(github.com/xtaci/kcp-go)
-Requires:       golang(github.com/xtaci/smux)
+Requires:       golang(github.com/vitrun/qart/qr)
 Requires:       golang(github.com/zillode/notify)
 Requires:       golang(golang.org/x/net/context)
 Requires:       golang(golang.org/x/net/ipv4)
@@ -165,12 +164,10 @@ Requires:       golang(golang.org/x/text/unicode/norm)
 Requires:       golang(golang.org/x/time/rate)
 
 %if %{with_tools}
-Requires:       golang(github.com/AudriusButkevicius/cli)
-Requires:       golang(github.com/cznic/ql)
 Requires:       golang(github.com/golang/groupcache/lru)
-Requires:       golang(github.com/lib/pq)
 Requires:       golang(github.com/oschwald/geoip2-golang)
 Requires:       golang(github.com/prometheus/client_golang/prometheus)
+Requires:       golang(github.com/prometheus/client_golang/prometheus/promhttp)
 %endif
 
 %if %{with_cli}
@@ -252,7 +249,6 @@ This package contains the syncthing unit tests.
 Summary:        Continuous File Synchronization (server tools)
 
 %if ! 0%{?with_bundled}
-BuildRequires:  golang(github.com/AudriusButkevicius/cli)
 BuildRequires:  golang(github.com/golang/groupcache/lru)
 BuildRequires:  golang(github.com/oschwald/geoip2-golang)
 BuildRequires:  golang(github.com/prometheus/client_golang/prometheus)
@@ -610,6 +606,9 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 
 
 %changelog
+* Tue Mar 06 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.45-1
+- Update to version 0.14.45.
+
 * Tue Feb 13 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.44-1
 - Update to version 0.14.44.
 
