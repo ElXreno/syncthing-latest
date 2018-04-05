@@ -27,15 +27,16 @@
 # https://github.com/syncthing/syncthing
 %global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global import_path     %{provider_prefix}
-%global commit          7a92f6c6b18230f74cc347f937fe81b44da6c9ee
+%global goipath         %{provider_prefix}
+%global commit          bea6ecaf35d92c95d7b8a7e2145bb56cc4d74d05
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 7a92f6c6b18230f74cc347f937fe81b44da6c9ee == version 0.14.45
+# commit bea6ecaf35d92c95d7b8a7e2145bb56cc4d74d05 == version 0.14.46
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.45
+Version:        0.14.46
 Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles
@@ -48,11 +49,6 @@ License:        MPLv2.0 and MIT and OFL
 URL:            https://syncthing.net
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-source-v%{version}.tar.gz
 
-# Patch build.go script so go build doesn't install deps
-# and produces debug-enabled binaries for rpm
-Patch0:         00-go-build-flags.patch
-Patch1:         00-go-build-flags-ppc64.patch
-
 # goleveldb in fedora is too old to have the nosync option, so disable it
 Patch2:         02-leveldb-nonosync.patch
 
@@ -62,14 +58,15 @@ ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 
 BuildRequires:  systemd
-%{?systemd_requires}
 
 %if 0%{?with_check} && ! 0%{?with_bundled}
 BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
+BuildRequires:  golang(github.com/Zillode/notify)
 BuildRequires:  golang(github.com/bkaradzic/go-lz4)
 BuildRequires:  golang(github.com/calmh/du)
 BuildRequires:  golang(github.com/calmh/xdr)
 BuildRequires:  golang(github.com/chmduquesne/rollinghash/adler32)
+BuildRequires:  golang(github.com/d4l3k/messagediff)
 BuildRequires:  golang(github.com/gobwas/glob)
 BuildRequires:  golang(github.com/gogo/protobuf/gogoproto)
 BuildRequires:  golang(github.com/gogo/protobuf/proto)
@@ -88,7 +85,6 @@ BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/storage)
 BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/util)
 BuildRequires:  golang(github.com/thejerf/suture)
 BuildRequires:  golang(github.com/vitrun/qart/qr)
-BuildRequires:  golang(github.com/zillode/notify)
 BuildRequires:  golang(golang.org/x/crypto/bcrypt)
 BuildRequires:  golang(golang.org/x/net/context)
 BuildRequires:  golang(golang.org/x/net/ipv4)
@@ -97,6 +93,8 @@ BuildRequires:  golang(golang.org/x/net/proxy)
 BuildRequires:  golang(golang.org/x/text/unicode/norm)
 BuildRequires:  golang(golang.org/x/time/rate)
 %endif
+
+%{?systemd_requires}
 
 Provides:       %{long_name} = %{version}-%{release}
 
@@ -133,10 +131,12 @@ Provides:       %{long_name}-devel = %{version}-%{release}
 BuildArch:      noarch
 
 Requires:       golang(github.com/AudriusButkevicius/go-nat-pmp)
+Requires:       golang(github.com/Zillode/notify)
 Requires:       golang(github.com/bkaradzic/go-lz4)
 Requires:       golang(github.com/calmh/du)
 Requires:       golang(github.com/calmh/xdr)
 Requires:       golang(github.com/chmduquesne/rollinghash/adler32)
+Requires:       golang(github.com/d4l3k/messagediff)
 Requires:       golang(github.com/gobwas/glob)
 Requires:       golang(github.com/gogo/protobuf/gogoproto)
 Requires:       golang(github.com/gogo/protobuf/proto)
@@ -155,7 +155,6 @@ Requires:       golang(github.com/syndtr/goleveldb/leveldb/storage)
 Requires:       golang(github.com/syndtr/goleveldb/leveldb/util)
 Requires:       golang(github.com/thejerf/suture)
 Requires:       golang(github.com/vitrun/qart/qr)
-Requires:       golang(github.com/zillode/notify)
 Requires:       golang(golang.org/x/net/context)
 Requires:       golang(golang.org/x/net/ipv4)
 Requires:       golang(golang.org/x/net/ipv6)
@@ -219,31 +218,6 @@ dependency for building packages using syncthing.
 %endif
 
 
-%if 0%{?with_unit_test} && 0%{?with_devel}
-%package        unit-test-devel
-Summary:        Continuous File Synchronization (unit tests)
-Provides:       %{long_name}-unit-test-devel = %{version}-%{release}
-
-# test subpackage tests code from devel subpackage
-Requires:       %{name}-devel = %{version}-%{release}
-
-%if 0%{?with_check} && ! 0%{?with_bundled}
-BuildRequires:  golang(github.com/d4l3k/messagediff)
-%endif
-
-Requires:       golang(github.com/d4l3k/messagediff)
-
-%description    unit-test-devel
-Syncthing replaces other file synchronization services with something
-open, trustworthy and decentralized. Your data is your data alone and
-you deserve to choose where it is stored, if it is shared with some
-third party and how it's transmitted over the Internet. Using syncthing,
-that control is returned to you.
-
-This package contains the syncthing unit tests.
-%endif
-
-
 %if 0%{?with_tools}
 %package        tools
 Summary:        Continuous File Synchronization (server tools)
@@ -292,16 +266,7 @@ This package contains the CLI program.
 
 
 %prep
-%setup -q -n syncthing
-
-# PIE build mode isn't supported on ppc64
-%ifarch ppc64
-%patch1 -p1
-%else
-%patch0 -p1
-%endif
-
-%patch2 -p1
+%autosetup -n syncthing -p1
 
 
 %build
@@ -309,74 +274,54 @@ This package contains the CLI program.
 rm -r vendor
 
 # prepare build environment
-mkdir -p ./_build/src/%{provider}.%{provider_tld}/%{project}
+mkdir -p ./_build/src/github.com/syncthing
 
 TOP=$(pwd)
-pushd _build/src/%{provider}.%{provider_tld}/%{project}
-ln -s $TOP ./syncthing
+pushd _build/src/github.com/syncthing
+ln -s $TOP syncthing
 popd
 
 export GOPATH=$(pwd)/_build:%{gopath}
 export BUILDDIR=$(pwd)/_build/src/%{import_path}
 
-# set BUILD_HOST variable so syncthing knows where it was built
-export BUILD_HOST=fedora-koji
-
-# run builds in appropriate directory
-pushd $BUILDDIR
-
-head -c20 /dev/urandom | od -An -tx1 | tr -d ' \n' > build_id
-go run build.go -no-upgrade build syncthing
-
-%if 0%{?with_tools}
-head -c20 /dev/urandom | od -An -tx1 | tr -d ' \n' > build_id
-go run build.go -no-upgrade build stdiscosrv
-
-head -c20 /dev/urandom | od -An -tx1 | tr -d ' \n' > build_id
-go run build.go -no-upgrade build strelaysrv
-
-head -c20 /dev/urandom | od -An -tx1 | tr -d ' \n' > build_id
-go run build.go -no-upgrade build strelaypoolsrv
-%endif
-
+# compile assets used by the build process
+pushd _build/src/%{import_path}
+go run build.go assets
+rm build.go
 popd
 
-# TODO: Build process cleanup
-# - drop patch to build.go
-# - build only assets
-# - inject custom upstream build flags here directly
-#pushd $BUILDDIR
-#go run build.go assets
-#popd
-#%%gobuild -o syncthing %%{import_path}/cmd/syncthing # FIXME flags
-#%%if 0%%{?with_tools}
-#%%gobuild -o stdiscosrv %%{import_path}/cmd/stdiscosrv # FIXME flags
-#%%gobuild -o strelaysrv %%{import_path}/cmd/strelaysrv # FIXME flags
-#%%gobuild -o strelaypoolsrv %%{import_path}/cmd/strelaypoolsrv # FIXME flags
-#%%endif
+# set variables expected by syncthing binaries as additional LDFLAGS
+export BUILD_HOST=fedora-koji
+export LDFLAGS="-X main.Version=v%{version} -X main.BuildStamp=$(date +%s) -X main.BuildUser=$USER -X main.BuildHost=$BUILD_HOST"
+export BUILDTAGS="noupgrade"
 
-%if 0%{?with_cli}
-%gobuild -o stcli %{import_path}/cmd/stcli
+%gobuild -o _bin/syncthing %{import_path}/cmd/syncthing
+
+%if 0%{?with_tools}
+%gobuild -o _bin/stdiscosrv %{import_path}/cmd/stdiscosrv
+%gobuild -o _bin/strelaysrv %{import_path}/cmd/strelaysrv
+%gobuild -o _bin/strelaypoolsrv %{import_path}/cmd/strelaypoolsrv
 %endif
 
-# remove build script so it doesn't get picked up later
-rm build.go
+%if 0%{?with_cli}
+%gobuild -o _bin/stcli %{import_path}/cmd/stcli
+%endif
 
 
 %install
 # install binaries
 mkdir -p %{buildroot}/%{_bindir}
 
-cp -pav ./syncthing %{buildroot}/%{_bindir}/
+cp -pav _bin/syncthing %{buildroot}/%{_bindir}/
 
 %if 0%{?with_tools}
-cp -pav ./stdiscosrv %{buildroot}/%{_bindir}/
-cp -pav ./strelaysrv %{buildroot}/%{_bindir}/
-cp -pav ./strelaypoolsrv %{buildroot}/%{_bindir}/
+cp -pav _bin/stdiscosrv %{buildroot}/%{_bindir}/
+cp -pav _bin/strelaysrv %{buildroot}/%{_bindir}/
+cp -pav _bin/strelaypoolsrv %{buildroot}/%{_bindir}/
 %endif
 
 %if 0%{?with_cli}
-cp -pav ./stcli %{buildroot}/%{_bindir}/
+cp -pav _bin/stcli %{buildroot}/%{_bindir}/
 %endif
 
 # install man pages
@@ -409,80 +354,12 @@ echo "disable syncthing*" > %{buildroot}/%{_userpresetdir}/90-syncthing.preset
 # Unmark source files as executable
 for i in $(find -name "*.go" -executable -print); do chmod a-x $i; done
 
-
-# source codes for building projects
-%if 0%{?with_devel}
-install -d -p %{buildroot}/%{gopath}/src/%{import_path}/
-echo "%%dir %%{gopath}/src/%%{import_path}/." >> devel.file-list
-
-# find all *.go but no *_test.go files and generate devel.file-list
-for file in $(find . \( -iname "*.go" -or -iname "*.s" \) \! -iname "*_test.go" | grep -v "vendor") ; do
-    dirprefix=$(dirname $file)
-    install -d -p %{buildroot}/%{gopath}/src/%{import_path}/$dirprefix
-    cp -pav $file %{buildroot}/%{gopath}/src/%{import_path}/$file
-    echo "%%{gopath}/src/%%{import_path}/$file" >> devel.file-list
-
-    while [ "$dirprefix" != "." ]; do
-        echo "%%dir %%{gopath}/src/%%{import_path}/$dirprefix" >> devel.file-list
-        dirprefix=$(dirname $dirprefix)
-    done
-done
-%endif
-
-# testing files for this project
-%if 0%{?with_unit_test} && 0%{?with_devel}
-install -d -p %{buildroot}/%{gopath}/src/%{import_path}/
-
-# find all *_test.go files and generate unit-test-devel.file-list
-for file in $(find . -iname "*_test.go" | grep -v "vendor") ; do
-    dirprefix=$(dirname $file)
-    install -d -p %{buildroot}/%{gopath}/src/%{import_path}/$dirprefix
-    cp -pav $file %{buildroot}/%{gopath}/src/%{import_path}/$file
-    echo "%%{gopath}/src/%%{import_path}/$file" >> unit-test-devel.file-list
-
-    while [ "$dirprefix" != "." ]; do
-        echo "%%dir %%{gopath}/src/%%{import_path}/$dirprefix" >> devel.file-list
-        dirprefix=$(dirname $dirprefix)
-    done
-done
-
-# add test data for unit test subpackage
-cp -pavr cmd/syncthing/testdata %{buildroot}/%{gopath}/src/%{import_path}/cmd/syncthing/
-echo "%%{gopath}/src/%%{import_path}/cmd/syncthing/testdata" >> unit-test-devel.file-list
-
-cp -pavr test/h* %{buildroot}/%{gopath}/src/%{import_path}/test/
-
-cp -pavr lib/config/testdata %{buildroot}/%{gopath}/src/%{import_path}/lib/config/
-echo "%%{gopath}/src/%%{import_path}/lib/config/testdata" >> unit-test-devel.file-list
-
-cp -pavr lib/db/testdata %{buildroot}/%{gopath}/src/%{import_path}/lib/db/
-echo "%%{gopath}/src/%%{import_path}/lib/db/testdata" >> unit-test-devel.file-list
-
-cp -pavr lib/ignore/testdata %{buildroot}/%{gopath}/src/%{import_path}/lib/ignore/
-echo "%%{gopath}/src/%%{import_path}/lib/ignore/testdata" >> unit-test-devel.file-list
-
-cp -pavr lib/model/testdata %{buildroot}/%{gopath}/src/%{import_path}/lib/model/
-echo "%%{gopath}/src/%%{import_path}/lib/model/testdata" >> unit-test-devel.file-list
-
-cp -pavr lib/scanner/testdata %{buildroot}/%{gopath}/src/%{import_path}/lib/scanner/
-echo "%%{gopath}/src/%%{import_path}/lib/scanner/testdata" >> unit-test-devel.file-list
-
-cp -pavr lib/versioner/_external_test %{buildroot}/%{gopath}/src/%{import_path}/lib/versioner/
-echo "%%{gopath}/src/%%{import_path}/lib/versioner/_external_test" >> unit-test-devel.file-list
-%endif
-
-%if 0%{?with_devel}
-sort -u -o devel.file-list devel.file-list
-%endif
-
-%if 0%{?with_unit_test}
-sort -u -o unit-test-devel.file-list unit-test-devel.file-list
-%endif
+%goinstall
 
 
 %check
 %if 0%{?with_check} && 0%{?with_unit_test} && 0%{?with_devel}
-export GOPATH=%{buildroot}/%{gopath}:%{gopath}
+export GOPATH=$(pwd)/_build:%{gopath}
 
 %if ! 0%{?gotest:1}
 %global gotest go test
@@ -528,14 +405,6 @@ export GOPATH=%{buildroot}/%{gopath}:%{gopath}
 
 %gotest %{import_path}/lib/watchaggregator
 %gotest %{import_path}/lib/weakhash
-
-# Clean up after the tests
-rm %{buildroot}/%{gopath}/src/%{import_path}/lib/model/testdata/empty
-rm -r %{buildroot}/%{gopath}/src/%{import_path}/test/h*/
-
-find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".gitignore" -print -delete
-find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stignore" -print -delete
-find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 %endif
 
 
@@ -550,10 +419,6 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 %postun
 %systemd_postun_with_restart 'syncthing@*.service'
 %systemd_user_postun_with_restart syncthing.service
-
-
-#define license tag if not already defined
-%{!?_licensedir:%global license %doc}
 
 
 %files
@@ -598,14 +463,11 @@ find %{buildroot}/%{gopath}/src/%{import_path}/ -name ".stfolder" -print -delete
 %endif
 
 
-%if 0%{?with_unit_test} && 0%{?with_devel}
-%files unit-test-devel -f unit-test-devel.file-list
-%license LICENSE
-%doc README.md AUTHORS
-%endif
-
-
 %changelog
+* Wed Apr 04 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.46-1
+- Update to version 0.14.46.
+- Simplify .spec file and build process, and drop build system patches.
+
 * Tue Mar 06 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.45-1
 - Update to version 0.14.45.
 
