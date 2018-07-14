@@ -37,7 +37,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        0.14.48
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # syncthing (MPLv2.0) bundles
 # - angular (MIT),
@@ -467,6 +467,9 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 
 %changelog
+* Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.14.48-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Tue Jun 05 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.48-1
 - Update to version 0.14.48.
 
