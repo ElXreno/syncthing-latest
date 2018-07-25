@@ -31,13 +31,13 @@
 %global commit          92602485434d17b473b2034b4291d29d869c4076
 %global shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-# commit 92602485434d17b473b2034b4291d29d869c4076 == version 0.14.48
+# commit 6b82538e623feb4df2bef9fc4b37d581de96309a == version 0.14.49
 
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.48
-Release:        2%{?dist}
+Version:        0.14.49
+Release:        1%{?dist}
 
 # syncthing (MPLv2.0) bundles
 # - angular (MIT),
@@ -49,11 +49,12 @@ License:        MPLv2.0 and MIT and OFL
 URL:            https://syncthing.net
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-source-v%{version}.tar.gz
 
-# replace usage of deprecated "github.com/kardianos/osext" by stdlib's "os"
-Patch1:         01-replace-deprecated-osext.patch
-
 # goleveldb in fedora is too old to have the nosync option, so disable it
 Patch2:         02-leveldb-nonosync.patch
+
+# Upstream patch to fix building tests with go 1.11+
+# https://github.com/syncthing/syncthing/commit/3d83440
+Patch3:         03-fix-go-111-type-error.patch
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
@@ -101,12 +102,14 @@ Provides:       %{long_name} = %{version}-%{release}
 
 Provides:       bundled(angular) = 1.3.20
 Provides:       bundled(angular-dirPagination) = 759009c
+Provides:       bundled(angular-sanitize) = 1.3.20
 Provides:       bundled(angular-translate) = 2.9.0.1
 Provides:       bundled(angular-translate-loader-static-files) = 2.11.0
 Provides:       bundled(bootstrap) = 3.3.6
-Provides:       bundled(font-awesome) = 4.5.0
+Provides:       bundled(daterangepicker) = 3.0.0
+Provides:       bundled(font-awesome) = 5.0.13
 Provides:       bundled(jquery) = 2.2.2
-Provides:       bundled(jquery-fancytree) = 2.26.0
+Provides:       bundled(jquery-fancytree) = 2.28.1
 Provides:       bundled(jquery-ui) = 1.12.1
 Provides:       bundled(moment) = 2.19.4
 
@@ -467,6 +470,11 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 
 %changelog
+* Wed Jul 25 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.49-1
+- Update to version 0.14.49.
+- Drop upstreamed osext patch.
+- Add upstream patch to fix building tests with go 1.11.
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.14.48-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
