@@ -1,43 +1,12 @@
-# Generate devel rpm
-%global with_devel 1
-# Build project from bundled dependencies
-%global with_bundled 0
-# Build with debug info rpm
-%global with_debug 1
-# Run tests in check section
-%global with_check 1
-# Generate unit-test rpm
-%global with_unit_test 1
-# Build server tools
-%global with_tools 1
-# Build CLI program
-%global with_cli 1
-
-%if 0%{?with_debug}
-%global _dwz_low_mem_die_limit 0
-%else
-%global debug_package   %{nil}
-%endif
-
-%global provider        github
-%global provider_tld    com
-%global project         syncthing
-%global repo            syncthing
-%global long_name       golang-%{provider}-%{project}-%{repo}
-# https://github.com/syncthing/syncthing
-%global provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
-%global import_path     %{provider_prefix}
-%global goipath         %{provider_prefix}
-%global commit          92602485434d17b473b2034b4291d29d869c4076
-%global shortcommit     %(c=%{commit}; echo ${c:0:7})
-
-# commit 6b82538e623feb4df2bef9fc4b37d581de96309a == version 0.14.49
-
+%global goipath github.com/syncthing/syncthing
+%global tag     v0.14.50
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.49
+Version:        0.14.50
 Release:        1%{?dist}
+
+%gometa
 
 # syncthing (MPLv2.0) bundles
 # - angular (MIT),
@@ -52,18 +21,9 @@ Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}
 # goleveldb in fedora is too old to have the nosync option, so disable it
 Patch2:         02-leveldb-nonosync.patch
 
-# Upstream patch to fix building tests with go 1.11+
-# https://github.com/syncthing/syncthing/commit/3d83440
-Patch3:         03-fix-go-111-type-error.patch
-
-# e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
-ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
-# If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
-BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
-
 BuildRequires:  systemd
 
-%if 0%{?with_check} && ! 0%{?with_bundled}
+BuildRequires:  golang(github.com/AudriusButkevicius/cli)
 BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
 BuildRequires:  golang(github.com/bkaradzic/go-lz4)
 BuildRequires:  golang(github.com/calmh/du)
@@ -73,9 +33,13 @@ BuildRequires:  golang(github.com/d4l3k/messagediff)
 BuildRequires:  golang(github.com/gobwas/glob)
 BuildRequires:  golang(github.com/gogo/protobuf/gogoproto)
 BuildRequires:  golang(github.com/gogo/protobuf/proto)
+BuildRequires:  golang(github.com/golang/groupcache/lru)
 BuildRequires:  golang(github.com/jackpal/gateway)
 BuildRequires:  golang(github.com/kballard/go-shellquote)
 BuildRequires:  golang(github.com/minio/sha256-simd)
+BuildRequires:  golang(github.com/oschwald/geoip2-golang)
+BuildRequires:  golang(github.com/prometheus/client_golang/prometheus)
+BuildRequires:  golang(github.com/prometheus/client_golang/prometheus/promhttp)
 BuildRequires:  golang(github.com/pkg/errors)
 BuildRequires:  golang(github.com/rcrowley/go-metrics)
 BuildRequires:  golang(github.com/sasha-s/go-deadlock)
@@ -94,11 +58,8 @@ BuildRequires:  golang(golang.org/x/net/ipv6)
 BuildRequires:  golang(golang.org/x/net/proxy)
 BuildRequires:  golang(golang.org/x/text/unicode/norm)
 BuildRequires:  golang(golang.org/x/time/rate)
-%endif
 
 %{?systemd_requires}
-
-Provides:       %{long_name} = %{version}-%{release}
 
 Provides:       bundled(angular) = 1.3.20
 Provides:       bundled(angular-dirPagination) = 759009c
@@ -128,85 +89,9 @@ that control is returned to you.
 This package contains the syncthing client binary and systemd services.
 
 
-%if 0%{?with_devel}
 %package        devel
 Summary:        Continuous File Synchronization (development files)
-Provides:       %{long_name}-devel = %{version}-%{release}
 BuildArch:      noarch
-
-Requires:       golang(github.com/AudriusButkevicius/go-nat-pmp)
-Requires:       golang(github.com/bkaradzic/go-lz4)
-Requires:       golang(github.com/calmh/du)
-Requires:       golang(github.com/calmh/xdr)
-Requires:       golang(github.com/chmduquesne/rollinghash/adler32)
-Requires:       golang(github.com/d4l3k/messagediff)
-Requires:       golang(github.com/gobwas/glob)
-Requires:       golang(github.com/gogo/protobuf/gogoproto)
-Requires:       golang(github.com/gogo/protobuf/proto)
-Requires:       golang(github.com/jackpal/gateway)
-Requires:       golang(github.com/kballard/go-shellquote)
-Requires:       golang(github.com/minio/sha256-simd)
-Requires:       golang(github.com/pkg/errors)
-Requires:       golang(github.com/rcrowley/go-metrics)
-Requires:       golang(github.com/sasha-s/go-deadlock)
-Requires:       golang(github.com/syncthing/notify)
-Requires:       golang(github.com/syndtr/goleveldb/leveldb)
-Requires:       golang(github.com/syndtr/goleveldb/leveldb/errors)
-Requires:       golang(github.com/syndtr/goleveldb/leveldb/iterator)
-Requires:       golang(github.com/syndtr/goleveldb/leveldb/opt)
-Requires:       golang(github.com/syndtr/goleveldb/leveldb/storage)
-Requires:       golang(github.com/syndtr/goleveldb/leveldb/util)
-Requires:       golang(github.com/thejerf/suture)
-Requires:       golang(github.com/vitrun/qart/qr)
-Requires:       golang(golang.org/x/net/ipv4)
-Requires:       golang(golang.org/x/net/ipv6)
-Requires:       golang(golang.org/x/net/proxy)
-Requires:       golang(golang.org/x/text/unicode/norm)
-Requires:       golang(golang.org/x/time/rate)
-
-%if %{with_tools}
-Requires:       golang(github.com/golang/groupcache/lru)
-Requires:       golang(github.com/oschwald/geoip2-golang)
-Requires:       golang(github.com/prometheus/client_golang/prometheus)
-Requires:       golang(github.com/prometheus/client_golang/prometheus/promhttp)
-%endif
-
-%if %{with_cli}
-Requires:       golang(github.com/AudriusButkevicius/cli)
-%endif
-
-Provides:       golang(%{import_path}/lib/auto) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/beacon) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/config) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/connections) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/db) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/dialer) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/discover) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/events) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/fs) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/ignore) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/logger) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/model) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/nat) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/osutil) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/pmp) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/protocol) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/rand) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/rc) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/relay/client) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/relay/protocol) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/scanner) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/sha256) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/signature) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/stats) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/sync) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/tlsutil) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/upgrade) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/upnp) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/util) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/versioner) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/watchaggregator) = %{version}-%{release}
-Provides:       golang(%{import_path}/lib/weakhash) = %{version}-%{release}
 
 %description    devel
 Syncthing replaces other file synchronization services with something
@@ -217,19 +102,10 @@ that control is returned to you.
 
 This package contains the syncthing sources, which are needed as
 dependency for building packages using syncthing.
-%endif
 
 
-%if 0%{?with_tools}
 %package        tools
 Summary:        Continuous File Synchronization (server tools)
-
-%if ! 0%{?with_bundled}
-BuildRequires:  golang(github.com/golang/groupcache/lru)
-BuildRequires:  golang(github.com/oschwald/geoip2-golang)
-BuildRequires:  golang(github.com/prometheus/client_golang/prometheus)
-BuildRequires:  golang(github.com/prometheus/client_golang/prometheus/promhttp)
-%endif
 
 %description    tools
 Syncthing replaces other file synchronization services with something
@@ -244,17 +120,10 @@ This package contains the main syncthing server tools:
   file transfers between client nodes, and
 * stdiscosrv, the syncthing discovery server for discovering nodes
   to connect to indirectly over the internet.
-%endif
 
 
-%if 0%{?with_cli}
 %package        cli
 Summary:        Continuous File Synchronization (CLI)
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-
-%if ! 0%{?with_bundled}
-BuildRequires:  golang(github.com/AudriusButkevicius/cli)
-%endif
 
 %description    cli
 Syncthing replaces other file synchronization services with something
@@ -264,7 +133,6 @@ third party and how it's transmitted over the Internet. Using syncthing,
 that control is returned to you.
 
 This package contains the CLI program.
-%endif
 
 
 %prep
@@ -284,10 +152,10 @@ ln -s $TOP syncthing
 popd
 
 export GOPATH=$(pwd)/_build:%{gopath}
-export BUILDDIR=$(pwd)/_build/src/%{import_path}
+export BUILDDIR=$(pwd)/_build/src/%{goipath}
 
 # compile assets used by the build process
-pushd _build/src/%{import_path}
+pushd _build/src/%{goipath}
 go run build.go assets
 rm build.go
 popd
@@ -297,17 +165,11 @@ export BUILD_HOST=fedora-koji
 export LDFLAGS="-X main.Version=v%{version} -X main.BuildStamp=$(date +%s) -X main.BuildUser=$USER -X main.BuildHost=$BUILD_HOST"
 export BUILDTAGS="noupgrade"
 
-%gobuild -o _bin/syncthing %{import_path}/cmd/syncthing
-
-%if 0%{?with_tools}
-%gobuild -o _bin/stdiscosrv %{import_path}/cmd/stdiscosrv
-%gobuild -o _bin/strelaysrv %{import_path}/cmd/strelaysrv
-%gobuild -o _bin/strelaypoolsrv %{import_path}/cmd/strelaypoolsrv
-%endif
-
-%if 0%{?with_cli}
-%gobuild -o _bin/stcli %{import_path}/cmd/stcli
-%endif
+%gobuild -o _bin/syncthing %{goipath}/cmd/syncthing
+%gobuild -o _bin/stdiscosrv %{goipath}/cmd/stdiscosrv
+%gobuild -o _bin/strelaysrv %{goipath}/cmd/strelaysrv
+%gobuild -o _bin/strelaypoolsrv %{goipath}/cmd/strelaypoolsrv
+%gobuild -o _bin/stcli %{goipath}/cmd/stcli
 
 
 %install
@@ -315,16 +177,10 @@ export BUILDTAGS="noupgrade"
 mkdir -p %{buildroot}/%{_bindir}
 
 cp -pav _bin/syncthing %{buildroot}/%{_bindir}/
-
-%if 0%{?with_tools}
 cp -pav _bin/stdiscosrv %{buildroot}/%{_bindir}/
 cp -pav _bin/strelaysrv %{buildroot}/%{_bindir}/
 cp -pav _bin/strelaypoolsrv %{buildroot}/%{_bindir}/
-%endif
-
-%if 0%{?with_cli}
 cp -pav _bin/stcli %{buildroot}/%{_bindir}/
-%endif
 
 # install man pages
 mkdir -p %{buildroot}/%{_mandir}/man1
@@ -334,11 +190,8 @@ mkdir -p %{buildroot}/%{_mandir}/man7
 cp -pav ./man/syncthing.1 %{buildroot}/%{_mandir}/man1/
 cp -pav ./man/*.5 %{buildroot}/%{_mandir}/man5/
 cp -pav ./man/*.7 %{buildroot}/%{_mandir}/man7/
-
-%if 0%{?with_tools}
 cp -pav ./man/stdiscosrv.1 %{buildroot}/%{_mandir}/man1/
 cp -pav ./man/strelaysrv.1 %{buildroot}/%{_mandir}/man1/
-%endif
 
 # install systemd units
 mkdir -p %{buildroot}/%{_unitdir}
@@ -360,58 +213,48 @@ for i in $(find -name "*.go" -executable -print); do chmod a-x $i; done
 
 
 %check
-%if 0%{?with_check} && 0%{?with_unit_test} && 0%{?with_devel}
 export GOPATH=$(pwd)/_build:%{gopath}
 
-%if ! 0%{?gotest:1}
-%global gotest go test
-%endif
-
-%gotest %{import_path}/cmd/stdiscosrv
-%gotest %{import_path}/cmd/syncthing
-%gotest %{import_path}/lib/auto
-%gotest %{import_path}/lib/beacon
-%gotest %{import_path}/lib/config
-%gotest %{import_path}/lib/connections
-%gotest %{import_path}/lib/db
-%gotest %{import_path}/lib/dialer
-%gotest %{import_path}/lib/discover
-%gotest %{import_path}/lib/events
-%gotest %{import_path}/lib/fs
-%gotest %{import_path}/lib/ignore
-%gotest %{import_path}/lib/logger
+%gotest %{goipath}/cmd/stdiscosrv
+%gotest %{goipath}/cmd/syncthing
+%gotest %{goipath}/lib/auto
+%gotest %{goipath}/lib/beacon
+%gotest %{goipath}/lib/config
+%gotest %{goipath}/lib/connections
+%gotest %{goipath}/lib/db
+%gotest %{goipath}/lib/dialer
+%gotest %{goipath}/lib/discover
+%gotest %{goipath}/lib/events
+%gotest %{goipath}/lib/fs
+%gotest %{goipath}/lib/ignore
+%gotest %{goipath}/lib/logger
 
 # This test sometimes fails dependent on load on some architectures:
 # https://github.com/syncthing/syncthing/issues/4370
-%gotest %{import_path}/lib/model || :
+%gotest %{goipath}/lib/model || :
 
-%gotest %{import_path}/lib/nat
-%gotest %{import_path}/lib/osutil
-%gotest %{import_path}/lib/pmp
-
-# This test seems to fail on 32 bit architectures only, ignore for now:
-# https://github.com/syncthing/syncthing/issues/4990
-%gotest %{import_path}/lib/protocol || :
-
-%gotest %{import_path}/lib/rand
-%gotest %{import_path}/lib/relay/client
-%gotest %{import_path}/lib/relay/protocol
-%gotest %{import_path}/lib/scanner
-%gotest %{import_path}/lib/signature
-%gotest %{import_path}/lib/stats
-%gotest %{import_path}/lib/sync
-%gotest %{import_path}/lib/tlsutil
-%gotest %{import_path}/lib/upgrade
-%gotest %{import_path}/lib/upnp
-%gotest %{import_path}/lib/util
+%gotest %{goipath}/lib/nat
+%gotest %{goipath}/lib/osutil
+%gotest %{goipath}/lib/pmp
+%gotest %{goipath}/lib/protocol
+%gotest %{goipath}/lib/rand
+%gotest %{goipath}/lib/relay/client
+%gotest %{goipath}/lib/relay/protocol
+%gotest %{goipath}/lib/scanner
+%gotest %{goipath}/lib/signature
+%gotest %{goipath}/lib/stats
+%gotest %{goipath}/lib/sync
+%gotest %{goipath}/lib/tlsutil
+%gotest %{goipath}/lib/upgrade
+%gotest %{goipath}/lib/upnp
+%gotest %{goipath}/lib/util
 
 # This test sometimes fails dependent on load on some architectures:
 # https://github.com/syncthing/syncthing/issues/4351
-%gotest %{import_path}/lib/versioner || :
+%gotest %{goipath}/lib/versioner || :
 
-%gotest %{import_path}/lib/watchaggregator
-%gotest %{import_path}/lib/weakhash
-%endif
+%gotest %{goipath}/lib/watchaggregator
+%gotest %{goipath}/lib/weakhash
 
 
 %post
@@ -441,7 +284,6 @@ export GOPATH=$(pwd)/_build:%{gopath}
 %{_userpresetdir}/90-syncthing.preset
 
 
-%if 0%{?with_tools}
 %files tools
 %license LICENSE
 %doc README.md AUTHORS
@@ -452,24 +294,26 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 %{_mandir}/man1/stdiscosrv*
 %{_mandir}/man1/strelaysrv*
-%endif
 
 
-%if 0%{?with_cli}
 %files cli
+%license LICENSE
+%doc README.md AUTHORS
+
 %{_bindir}/stcli
-%endif
 
 
-%if 0%{?with_devel}
 %files devel -f devel.file-list
 %license LICENSE
 %doc README.md AUTHORS
-%dir %{gopath}/src/%{provider}.%{provider_tld}/%{project}
-%endif
 
 
 %changelog
+* Tue Sep 11 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.50-1
+- Update to version 0.14.50.
+- Clean up .spec file and use new macros.
+- Drop upstreamed go1.11 patch.
+
 * Wed Jul 25 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.49-1
 - Update to version 0.14.49.
 - Drop upstreamed osext patch.
