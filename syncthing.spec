@@ -4,7 +4,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        0.14.50
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %gometa
 
@@ -17,6 +17,9 @@ License:        MPLv2.0 and MIT and OFL
 
 URL:            https://syncthing.net
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-source-v%{version}.tar.gz
+
+# rollinghash behavior changed with version 4.0.0
+Patch1:         01-rollinghash-behaviour-changes.patch
 
 # goleveldb in fedora is too old to have the nosync option, so disable it
 Patch2:         02-leveldb-nonosync.patch
@@ -213,6 +216,7 @@ for i in $(find -name "*.go" -executable -print); do chmod a-x $i; done
 
 
 %check
+export LANG=C.utf8
 export GOPATH=$(pwd)/_build:%{gopath}
 
 %gotest %{goipath}/cmd/stdiscosrv
@@ -309,6 +313,9 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 
 %changelog
+* Sun Sep 30 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.50-2
+- Adapt to rollinghash v4.0.0 changes.
+
 * Tue Sep 11 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.50-1
 - Update to version 0.14.50.
 - Clean up .spec file and use new macros.
