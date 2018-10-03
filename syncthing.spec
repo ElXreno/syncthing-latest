@@ -1,10 +1,10 @@
 %global goipath github.com/syncthing/syncthing
-%global tag     v0.14.50
+%global tag     v0.14.51
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.50
-Release:        2%{?dist}
+Version:        0.14.51
+Release:        1%{?dist}
 
 %gometa
 
@@ -61,6 +61,7 @@ BuildRequires:  golang(golang.org/x/net/ipv6)
 BuildRequires:  golang(golang.org/x/net/proxy)
 BuildRequires:  golang(golang.org/x/text/unicode/norm)
 BuildRequires:  golang(golang.org/x/time/rate)
+BuildRequires:  golang(gopkg.in/ldap.v2)
 
 %{?systemd_requires}
 
@@ -205,12 +206,14 @@ cp -pav etc/linux-systemd/system/syncthing-resume.service %{buildroot}/%{_unitdi
 cp -pav etc/linux-systemd/user/syncthing.service %{buildroot}/%{_userunitdir}/
 
 # install systemd preset disabling the service per default
-mkdir -p %{buildroot}/%{_prefix}/lib/systemd/user-preset
+mkdir -p %{buildroot}/%{_userpresetdir}
 echo "disable syncthing*" > %{buildroot}/%{_userpresetdir}/90-syncthing.preset
 
 
 # Unmark source files as executable
-for i in $(find -name "*.go" -executable -print); do chmod a-x $i; done
+for i in $(find -name "*.go" -executable -print); do
+    chmod a-x $i;
+done
 
 %goinstall
 
@@ -220,6 +223,7 @@ export LANG=C.utf8
 export GOPATH=$(pwd)/_build:%{gopath}
 
 %gotest %{goipath}/cmd/stdiscosrv
+%gotest %{goipath}/cmd/strelaypoolsrv
 %gotest %{goipath}/cmd/syncthing
 %gotest %{goipath}/lib/auto
 %gotest %{goipath}/lib/beacon
@@ -313,6 +317,9 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 
 %changelog
+* Tue Oct 02 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.51-1
+- Update to version 0.14.51.
+
 * Sun Sep 30 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.50-2
 - Adapt to rollinghash v4.0.0 changes.
 
