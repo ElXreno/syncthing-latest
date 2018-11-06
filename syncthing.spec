@@ -1,9 +1,9 @@
 %global goipath github.com/syncthing/syncthing
-%global tag     v0.14.51
+%global tag     v0.14.52
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.51
+Version:        0.14.52
 Release:        1%{?dist}
 
 %gometa
@@ -11,9 +11,9 @@ Release:        1%{?dist}
 # syncthing (MPLv2.0) bundles
 # - angular (MIT),
 # - bootstrap (MIT),
-# - font-awesome (MIT/OFL), and
+# - ForkAwesome (MIT/OFL/CC-BY 3.0), and
 # - moment (MIT)
-License:        MPLv2.0 and MIT and OFL
+License:        MPLv2.0 and MIT and OFL and CC-BY
 
 URL:            https://syncthing.net
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-source-v%{version}.tar.gz
@@ -72,7 +72,7 @@ Provides:       bundled(angular-translate) = 2.9.0.1
 Provides:       bundled(angular-translate-loader-static-files) = 2.11.0
 Provides:       bundled(bootstrap) = 3.3.6
 Provides:       bundled(daterangepicker) = 3.0.0
-Provides:       bundled(font-awesome) = 5.0.13
+Provides:       bundled(ForkAwesome) = 1.1.2
 Provides:       bundled(jquery) = 2.2.2
 Provides:       bundled(jquery-fancytree) = 2.28.1
 Provides:       bundled(jquery-ui) = 1.12.1
@@ -317,6 +317,9 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 
 %changelog
+* Tue Nov 06 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.52-1
+- Update to version 0.14.52.
+
 * Tue Oct 02 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.51-1
 - Update to version 0.14.51.
 

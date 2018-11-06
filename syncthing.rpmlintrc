@@ -1,0 +1,5 @@
+# don't care about manpages
+addFilter("W: no-manual-page-for-binary *")
+
+# this is expected for golang packages
+addFilter("W: hidden-file-or-dir /usr/share/gocode/src/github.com/syncthing/syncthing/.goipath*")
