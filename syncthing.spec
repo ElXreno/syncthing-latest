@@ -1,9 +1,9 @@
 %global goipath github.com/syncthing/syncthing
-%global tag     v0.14.52
+%global tag     v0.14.54
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.52
+Version:        0.14.54
 Release:        1%{?dist}
 
 %gometa
@@ -16,52 +16,50 @@ Release:        1%{?dist}
 License:        MPLv2.0 and MIT and OFL and CC-BY
 
 URL:            https://syncthing.net
-Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-source-v%{version}.tar.gz
-
-# rollinghash behavior changed with version 4.0.0
-Patch1:         01-rollinghash-behaviour-changes.patch
+Source0:        %{gourl}/releases/download/%{tag}/%{name}-source-%{tag}.tar.gz
 
 # goleveldb in fedora is too old to have the nosync option, so disable it
-Patch2:         02-leveldb-nonosync.patch
+#Patch2:         02-leveldb-nonosync.patch
 
+BuildRequires:  desktop-file-utils
 BuildRequires:  systemd
 
-BuildRequires:  golang(github.com/AudriusButkevicius/cli)
-BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
-BuildRequires:  golang(github.com/bkaradzic/go-lz4)
-BuildRequires:  golang(github.com/calmh/du)
-BuildRequires:  golang(github.com/calmh/xdr)
-BuildRequires:  golang(github.com/chmduquesne/rollinghash/adler32)
-BuildRequires:  golang(github.com/d4l3k/messagediff)
-BuildRequires:  golang(github.com/gobwas/glob)
-BuildRequires:  golang(github.com/gogo/protobuf/gogoproto)
-BuildRequires:  golang(github.com/gogo/protobuf/proto)
-BuildRequires:  golang(github.com/golang/groupcache/lru)
-BuildRequires:  golang(github.com/jackpal/gateway)
-BuildRequires:  golang(github.com/kballard/go-shellquote)
-BuildRequires:  golang(github.com/minio/sha256-simd)
-BuildRequires:  golang(github.com/oschwald/geoip2-golang)
-BuildRequires:  golang(github.com/prometheus/client_golang/prometheus)
-BuildRequires:  golang(github.com/prometheus/client_golang/prometheus/promhttp)
-BuildRequires:  golang(github.com/pkg/errors)
-BuildRequires:  golang(github.com/rcrowley/go-metrics)
-BuildRequires:  golang(github.com/sasha-s/go-deadlock)
-BuildRequires:  golang(github.com/syncthing/notify)
-BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb)
-BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/errors)
-BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/iterator)
-BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/opt)
-BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/storage)
-BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/util)
-BuildRequires:  golang(github.com/thejerf/suture)
-BuildRequires:  golang(github.com/vitrun/qart/qr)
-BuildRequires:  golang(golang.org/x/crypto/bcrypt)
-BuildRequires:  golang(golang.org/x/net/ipv4)
-BuildRequires:  golang(golang.org/x/net/ipv6)
-BuildRequires:  golang(golang.org/x/net/proxy)
-BuildRequires:  golang(golang.org/x/text/unicode/norm)
-BuildRequires:  golang(golang.org/x/time/rate)
-BuildRequires:  golang(gopkg.in/ldap.v2)
+#BuildRequires:  golang(github.com/AudriusButkevicius/cli)
+#BuildRequires:  golang(github.com/AudriusButkevicius/go-nat-pmp)
+#BuildRequires:  golang(github.com/bkaradzic/go-lz4)
+#BuildRequires:  golang(github.com/calmh/du)
+#BuildRequires:  golang(github.com/calmh/xdr)
+#BuildRequires:  golang(github.com/chmduquesne/rollinghash/adler32)
+#BuildRequires:  golang(github.com/d4l3k/messagediff)
+#BuildRequires:  golang(github.com/gobwas/glob)
+#BuildRequires:  golang(github.com/gogo/protobuf/gogoproto)
+#BuildRequires:  golang(github.com/gogo/protobuf/proto)
+#BuildRequires:  golang(github.com/golang/groupcache/lru)
+#BuildRequires:  golang(github.com/jackpal/gateway)
+#BuildRequires:  golang(github.com/kballard/go-shellquote)
+#BuildRequires:  golang(github.com/minio/sha256-simd)
+#BuildRequires:  golang(github.com/oschwald/geoip2-golang)
+#BuildRequires:  golang(github.com/prometheus/client_golang/prometheus)
+#BuildRequires:  golang(github.com/prometheus/client_golang/prometheus/promhttp)
+#BuildRequires:  golang(github.com/pkg/errors)
+#BuildRequires:  golang(github.com/rcrowley/go-metrics)
+#BuildRequires:  golang(github.com/sasha-s/go-deadlock)
+#BuildRequires:  golang(github.com/syncthing/notify)
+#BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb)
+#BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/errors)
+#BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/iterator)
+#BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/opt)
+#BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/storage)
+#BuildRequires:  golang(github.com/syndtr/goleveldb/leveldb/util)
+#BuildRequires:  golang(github.com/thejerf/suture)
+#BuildRequires:  golang(github.com/vitrun/qart/qr)
+#BuildRequires:  golang(golang.org/x/crypto/bcrypt)
+#BuildRequires:  golang(golang.org/x/net/ipv4)
+#BuildRequires:  golang(golang.org/x/net/ipv6)
+#BuildRequires:  golang(golang.org/x/net/proxy)
+#BuildRequires:  golang(golang.org/x/text/unicode/norm)
+#BuildRequires:  golang(golang.org/x/time/rate)
+#BuildRequires:  golang(gopkg.in/ldap.v2)
 
 %{?systemd_requires}
 
@@ -77,6 +75,100 @@ Provides:       bundled(jquery) = 2.2.2
 Provides:       bundled(jquery-fancytree) = 2.28.1
 Provides:       bundled(jquery-ui) = 1.12.1
 Provides:       bundled(moment) = 2.19.4
+
+Provides:       bundled(golang(code.cloudfoundry.org/bytefmt)) = a052d587819f45f719a22e344a8ad7858deb3733
+Provides:       bundled(golang(github.com/AudriusButkevicius/cli)) = 7f561c78b5a4aad858d9fd550c92b5da6d55efbb
+Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c97607362b2ab5a7839b8d1704f0396b640ca
+Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 9dca34a5b530bfc9843fa8aa2ff08ff9821032cb
+Provides:       bundled(golang(github.com/BurntSushi/toml)) = a368813c5e648fee92e5f6c30e3944ff9d5e8895
+Provides:       bundled(golang(github.com/a8m/mark)) = 44f2db6188458162890ca13980819247418d8e45
+Provides:       bundled(golang(github.com/beorn7/perks/quantile)) = 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
+Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27ef618c0a95f1ae69dbb0488abc33a
+Provides:       bundled(golang(github.com/calmh/du)) = dd9dc2043353249b2910b29dcfd6f6d4e64f39be
+Provides:       bundled(golang(github.com/calmh/xdr)) = 08e072f9cb164f943a92eb59f90f3abc64ac6e8f
+Provides:       bundled(golang(github.com/cheggaaa/pb)) = 18d384da9bdc1e5a08fc2a62a494c321d9ae74ea
+Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = abb8cbaf9915e48ee20cae94bcd94221b61707a2
+Provides:       bundled(golang(github.com/d4l3k/messagediff)) = 29f32d820d112dbd66e58492a6ffb7cc3106312b
+Provides:       bundled(golang(github.com/dustin/go-humanize)) = bb3d318650d48840a39aa21a027c6630e198e626
+Provides:       bundled(golang(github.com/gernest/wow)) = 7e0b2a2398989a5d220eebac5742d45422ba7de8
+Provides:       bundled(golang(github.com/go-ini/ini)) = 32e4c1e6bc4e7d0d8451aa6b75200d19e37a536a
+Provides:       bundled(golang(github.com/gobwas/glob)) = 51eb1ee00b6d931c66d229ceeb7c31b985563420
+Provides:       bundled(golang(github.com/gogo/protobuf)) = 160de10b2537169b5ae3e7e221d28269ef40d311
+Provides:       bundled(golang(github.com/golang/groupcache/lru)) = 84a468cf14b4376def5d68c722b139b881c450a4
+Provides:       bundled(golang(github.com/golang/protobuf/proto)) = 1e59b77b52bf8e4b449a57e6f79f21226d571845
+Provides:       bundled(golang(github.com/golang/protobuf/ptypes/any)) = 1e59b77b52bf8e4b449a57e6f79f21226d571845
+Provides:       bundled(golang(github.com/golang/snappy)) = 553a641470496b2327abcac10b36396bd98e45c9
+Provides:       bundled(golang(github.com/jackpal/gateway)) = 5795ac81146e01d3fab7bcf21c043c3d6a32b006
+Provides:       bundled(golang(github.com/kballard/go-shellquote)) = cd60e84ee657ff3dc51de0b4f55dd299a3e136f2
+Provides:       bundled(golang(github.com/klauspost/cpuid)) = eae9b3e628d72774e13bdf024e78c0802f85a5b9
+Provides:       bundled(golang(github.com/lib/pq)) = 4ded0e9383f75c197b3a2aaa6d590ac52df6fd79
+Provides:       bundled(golang(github.com/magefile/mage/mg)) = 63768081a3236a7c6c53ef72e402ae1fe1664b61
+Provides:       bundled(golang(github.com/magefile/mage/sh)) = 63768081a3236a7c6c53ef72e402ae1fe1664b61
+Provides:       bundled(golang(github.com/magefile/mage/types)) = 63768081a3236a7c6c53ef72e402ae1fe1664b61
+Provides:       bundled(golang(github.com/mattn/go-runewidth)) = 97311d9f7767e3d6f422ea06661bc2c7a19e8a5d
+Provides:       bundled(golang(github.com/matttproud/golang_protobuf_extensions/pbutil)) = c12348ce28de40eed0136aa2b644d0ee0650e56c
+Provides:       bundled(golang(github.com/minio/cli)) = 45db1f8a055198ad8c12754026cb2c51c584c756
+Provides:       bundled(golang(github.com/minio/sha256-simd)) = ad98a36ba0da87206e3378c556abbfeaeaa98668
+Provides:       bundled(golang(github.com/mitchellh/go-homedir)) = b8bc1bf767474819792c23f32d8286a45736f1c6
+Provides:       bundled(golang(github.com/onsi/ginkgo)) = 6c46eb8334b30dc55b42f1a1c725d5ce97375390
+Provides:       bundled(golang(github.com/onsi/gomega)) = ba3724c94e4dd5d5690d37c190f1c54b2c1b4e64
+Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 5b1dc16861f81d05d9836bb21c2d0d65282fc0b8
+Provides:       bundled(golang(github.com/oschwald/maxminddb-golang)) = 26fe5ace1c706491c2936119e1dc69c1a9c04d7f
+Provides:       bundled(golang(github.com/petermattis/goid)) = 3db12ebb2a599ba4a96bea1c17b61c2f78a40e02
+Provides:       bundled(golang(github.com/pkg/errors)) = e881fd58d78e04cf6d0de1217f8707c8cc2249bc
+Provides:       bundled(golang(github.com/prometheus/client_golang/prometheus)) = 1cafe34db7fdec6022e17e00e1c1ea501022f3e4
+Provides:       bundled(golang(github.com/prometheus/client_model/go)) = 99fa1f4be8e564e8a6b613da7fa6f46c9edafc6c
+Provides:       bundled(golang(github.com/prometheus/common/expfmt)) = 2e54d0b93cba2fd133edc32211dcc32c06ef72ca
+Provides:       bundled(golang(github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg)) = 2e54d0b93cba2fd133edc32211dcc32c06ef72ca
+Provides:       bundled(golang(github.com/prometheus/common/model)) = 2e54d0b93cba2fd133edc32211dcc32c06ef72ca
+Provides:       bundled(golang(github.com/prometheus/procfs)) = b15cd069a83443be3154b719d0cc9fe8117f09fb
+Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = e181e095bae94582363434144c61a9653aff6e50
+Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 03d40e5dbd5488667a13b3c2600b2f7c2886f02f
+Provides:       bundled(golang(github.com/sirupsen/logrus)) = d682213848ed68c0a260ca37d6dd5ace8423f5ba
+Provides:       bundled(golang(github.com/stathat/go)) = 74669b9f388d9d788c97399a0824adbfee78400e
+Provides:       bundled(golang(github.com/syncthing/notify)) = 116c45bb5ad48777321e4984d1320d56889b6097
+Provides:       bundled(golang(github.com/syndtr/goleveldb/leveldb)) = 34011bf325bce385408353a30b101fe5e923eb6e
+Provides:       bundled(golang(github.com/templexxx/cpufeat)) = 3794dfbfb04749f896b521032f69383f24c3687e
+Provides:       bundled(golang(github.com/thejerf/suture)) = bf6ee6a0b047ebbe9ae07d847f750dd18c6a9276
+Provides:       bundled(golang(github.com/tjfoc/gmsm/sm4)) = 98aa888b79d8de04afe0fccf45ed10594efc858b
+Provides:       bundled(golang(github.com/vitrun/qart/coding)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
+Provides:       bundled(golang(github.com/vitrun/qart/gf256)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
+Provides:       bundled(golang(github.com/vitrun/qart/qr)) = bf64b92db6b05651d6c25a3dabf2d543b360c0aa
+Provides:       bundled(golang(golang.org/x/crypto/bcrypt)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/crypto/blowfish)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/crypto/cast5)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/crypto/pbkdf2)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/crypto/salsa20)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/crypto/ssh/terminal)) = 0fcca4842a8d74bfddc2c96a073bd2a4d2a7a2e8
+Provides:       bundled(golang(golang.org/x/crypto/tea)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/crypto/twofish)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/crypto/xtea)) = 95a4943f35d008beabde8c11e5075a1b714e6419
+Provides:       bundled(golang(golang.org/x/net/bpf)) = d866cfc389cec985d6fda2859936a575a55a3ab6
+Provides:       bundled(golang(golang.org/x/net/html)) = d866cfc389cec985d6fda2859936a575a55a3ab6
+Provides:       bundled(golang(golang.org/x/net/internal/iana)) = d866cfc389cec985d6fda2859936a575a55a3ab6
+Provides:       bundled(golang(golang.org/x/net/internal/socket)) = d866cfc389cec985d6fda2859936a575a55a3ab6
+Provides:       bundled(golang(golang.org/x/net/ipv4)) = d866cfc389cec985d6fda2859936a575a55a3ab6
+Provides:       bundled(golang(golang.org/x/net/ipv6)) = d866cfc389cec985d6fda2859936a575a55a3ab6
+Provides:       bundled(golang(golang.org/x/net/proxy)) = d866cfc389cec985d6fda2859936a575a55a3ab6
+Provides:       bundled(golang(golang.org/x/sys/unix)) = 83801418e1b59fb1880e363299581ee543af32ca
+Provides:       bundled(golang(golang.org/x/sys/windows)) = 83801418e1b59fb1880e363299581ee543af32ca
+Provides:       bundled(golang(golang.org/x/text/encoding)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/internal/format)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/internal/gen)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/internal/tag)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/internal/triegen)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/internal/ucd)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/internal/utf8internal)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/language)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/runes)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/transform)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/unicode/cldr)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/text/unicode/norm)) = e19ae1496984b1c655b8044a65c0300a3c878dd3
+Provides:       bundled(golang(golang.org/x/time/rate)) = 6dc17368e09b0e8634d71cac8168d853e869a0c7
+Provides:       bundled(golang(gopkg.in/asn1-ber.v1)) = 379148ca0225df7a432012b8df0355c2a2063ac0
+Provides:       bundled(golang(gopkg.in/ldap.v2)) = bb7a9ca6e4fbc2129e3db588a34bc970ffe811a9
+Provides:       bundled(golang(gopkg.in/urfave/cli.v1)) = cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+Provides:       bundled(golang(gopkg.in/yaml.v2)) = 287cf08546ab5e7e37d55a84f7ed3fd1db036de5
 
 # an inotify filesystem watcher is integrated with syncthing now
 Provides:       syncthing-inotify = 0.8.7-5
@@ -145,7 +237,7 @@ This package contains the CLI program.
 
 %build
 # remove bundled libraries
-rm -r vendor
+#rm -r vendor
 
 # prepare build environment
 mkdir -p ./_build/src/github.com/syncthing
@@ -209,6 +301,11 @@ cp -pav etc/linux-systemd/user/syncthing.service %{buildroot}/%{_userunitdir}/
 mkdir -p %{buildroot}/%{_userpresetdir}
 echo "disable syncthing*" > %{buildroot}/%{_userpresetdir}/90-syncthing.preset
 
+# install .desktop files
+mkdir -p %{buildroot}/%{_datadir}/applications
+
+cp -pav etc/linux-desktop/*.desktop %{buildroot}/%{_datadir}/applications/
+
 
 # Unmark source files as executable
 for i in $(find -name "*.go" -executable -print); do
@@ -219,6 +316,9 @@ done
 
 
 %check
+desktop-file-validate \
+    %{buildroot}/%{_datadir}/applications/syncthing*.desktop
+
 export LANG=C.utf8
 export GOPATH=$(pwd)/_build:%{gopath}
 
@@ -291,6 +391,8 @@ export GOPATH=$(pwd)/_build:%{gopath}
 %{_userunitdir}/syncthing.service
 %{_userpresetdir}/90-syncthing.preset
 
+%{_datadir}/applications/syncthing*.desktop
+
 
 %files tools
 %license LICENSE
@@ -317,6 +419,13 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 
 %changelog
+* Wed Dec 26 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.54-1
+- Update to version 0.14.54.
+- Switch back to using bundled dependencies.
+
+* Tue Dec 04 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.53-1
+- Update to version 0.14.53.
+
 * Tue Nov 06 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.52-1
 - Update to version 0.14.52.
 
