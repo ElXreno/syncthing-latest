@@ -1,9 +1,9 @@
 %global goipath github.com/syncthing/syncthing
-%global tag     v0.14.54
+%global tag     v1.0.0
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        0.14.54
+Version:        1.0.0
 Release:        1%{?dist}
 
 %gometa
@@ -87,7 +87,7 @@ Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27ef618c
 Provides:       bundled(golang(github.com/calmh/du)) = dd9dc2043353249b2910b29dcfd6f6d4e64f39be
 Provides:       bundled(golang(github.com/calmh/xdr)) = 08e072f9cb164f943a92eb59f90f3abc64ac6e8f
 Provides:       bundled(golang(github.com/cheggaaa/pb)) = 18d384da9bdc1e5a08fc2a62a494c321d9ae74ea
-Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = abb8cbaf9915e48ee20cae94bcd94221b61707a2
+Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = a60f8e7142b536ea61bb5d84014171189eeaaa81
 Provides:       bundled(golang(github.com/d4l3k/messagediff)) = 29f32d820d112dbd66e58492a6ffb7cc3106312b
 Provides:       bundled(golang(github.com/dustin/go-humanize)) = bb3d318650d48840a39aa21a027c6630e198e626
 Provides:       bundled(golang(github.com/gernest/wow)) = 7e0b2a2398989a5d220eebac5742d45422ba7de8
@@ -419,6 +419,9 @@ export GOPATH=$(pwd)/_build:%{gopath}
 
 
 %changelog
+* Mon Jan 07 2019 Fabio Valentini <decathorpe@gmail.com> - 1.0.0-1
+- Update to version 1.0.0.
+
 * Wed Dec 26 2018 Fabio Valentini <decathorpe@gmail.com> - 0.14.54-1
 - Update to version 0.14.54.
 - Switch back to using bundled dependencies.
