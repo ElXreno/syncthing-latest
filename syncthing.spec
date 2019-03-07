@@ -1,7 +1,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        1.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -174,7 +174,7 @@ popd
 
 # set variables expected by syncthing binaries as additional LDFLAGS
 export BUILD_HOST=fedora-koji
-export LDFLAGS="-X main.Version=v%{version} -X main.BuildStamp=$(date +%s) -X main.BuildUser=$USER -X main.BuildHost=$BUILD_HOST"
+export LDFLAGS="-X %{goipath}/lib/build.Version=v%{version} -X %{goipath}/lib/build.Stamp=$(date +%s) -X %{goipath}/lib/build.User=$USER -X %{goipath}/lib/build.Host=$BUILD_HOST"
 export BUILDTAGS="noupgrade"
 
 %gobuild -o _bin/syncthing %{goipath}/cmd/syncthing
@@ -338,6 +338,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Thu Mar 07 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.0-2
+- Fix build tags for changed variable names.
+
 * Tue Mar 05 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.0-1
 - Update to version 1.1.0.
 
