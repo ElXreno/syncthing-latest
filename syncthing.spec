@@ -1,7 +1,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.1.0
-Release:        2%{?dist}
+Version:        1.1.1
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -219,11 +219,6 @@ cp -pav etc/linux-systemd/user/syncthing.service %{buildroot}/%{_userunitdir}/
 mkdir -p %{buildroot}/%{_userpresetdir}
 echo "disable syncthing*" > %{buildroot}/%{_userpresetdir}/90-syncthing.preset
 
-# install .desktop files
-mkdir -p %{buildroot}/%{_datadir}/applications
-
-cp -pav etc/linux-desktop/*.desktop %{buildroot}/%{_datadir}/applications/
-
 
 # Unmark source files as executable
 for i in $(find -name "*.go" -executable -print); do
@@ -234,9 +229,6 @@ done
 
 
 %check
-desktop-file-validate \
-    %{buildroot}/%{_datadir}/applications/syncthing*.desktop
-
 export LANG=C.utf8
 export GOPATH=$(pwd)/_build:%{gopath}
 export GO111MODULE=off
@@ -310,8 +302,6 @@ export GO111MODULE=off
 %{_userunitdir}/syncthing.service
 %{_userpresetdir}/90-syncthing.preset
 
-%{_datadir}/applications/syncthing*.desktop
-
 
 %files tools
 %license LICENSE
@@ -338,6 +328,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Fri Apr 05 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.1-1
+- Update to version 1.1.1.
+
 * Thu Mar 07 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.0-2
 - Fix build tags for changed variable names.
 
