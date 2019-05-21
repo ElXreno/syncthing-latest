@@ -1,6 +1,6 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.1.1
+Version:        1.1.3
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
@@ -9,12 +9,10 @@ Release:        1%{?dist}
 %gometa
 
 # syncthing (MPLv2.0) bundles
-# - angular (MIT),
-# - bootstrap (MIT),
+# - angular, bootstrap, daterangepicker, fancytree, jQuery, moment (MIT),
 # - ForkAwesome (MIT/OFL/CC-BY 3.0), and
-# - moment (MIT)
-# - a number of go packages (see below)
-License:        MPLv2.0 and MIT and OFL and CC-BY
+# - a number of go packages (ASL 2.0, MPLv2.0, BSD, Unlicense, MIT, ISC)
+License:        MPLv2.0 and MIT and OFL and CC-BY and ASL 2.0 and BSD and Unlicense and ISC
 
 URL:            https://syncthing.net
 Source0:        %{gourl}/releases/download/%{tag}/%{name}-source-%{tag}.tar.gz
@@ -74,9 +72,8 @@ Provides:       bundled(golang(github.com/syndtr/goleveldb)) = 34011bf325bc
 Provides:       bundled(golang(github.com/thejerf/suture)) = 3.0.2+incompatible
 Provides:       bundled(golang(github.com/urfave/cli)) = 1.20.0
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
-Provides:       bundled(golang(golang.org/x/crypto)) = 0fcca4842a8d
+Provides:       bundled(golang(golang.org/x/crypto)) = c2843e01d9a2
 Provides:       bundled(golang(golang.org/x/net)) = 351d144fa1fc
-Provides:       bundled(golang(golang.org/x/sys)) = 4d1cda033e06
 Provides:       bundled(golang(golang.org/x/text)) = e19ae1496984
 Provides:       bundled(golang(golang.org/x/time)) = 6dc17368e09b
 Provides:       bundled(golang(gopkg.in/asn1-ber.v1)) = 379148ca0225
@@ -328,6 +325,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue May 21 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.3-1
+- Update to version 1.1.3.
+
 * Fri Apr 05 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.1-1
 - Update to version 1.1.1.
 
