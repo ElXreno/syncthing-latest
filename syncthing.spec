@@ -1,6 +1,6 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.1.3
+Version:        1.1.4
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
@@ -47,18 +47,18 @@ Provides:       bundled(golang(github.com/d4l3k/messagediff)) = 1.2.1
 Provides:       bundled(golang(github.com/davecgh/go-spew)) = 1.1.1
 Provides:       bundled(golang(github.com/flynn-archive/go-shlex)) = 3f9db97f8568
 Provides:       bundled(golang(github.com/gobwas/glob)) = 51eb1ee00b6d
-Provides:       bundled(golang(github.com/gogo/protobuf)) = 1.2.0
+Provides:       bundled(golang(github.com/gogo/protobuf)) = 1.2.1
 Provides:       bundled(golang(github.com/golang/groupcache)) = 84a468cf14b4
 Provides:       bundled(golang(github.com/golang/snappy)) = 553a64147049
 Provides:       bundled(golang(github.com/jackpal/gateway)) = 5795ac81146e
 Provides:       bundled(golang(github.com/kballard/go-shellquote)) = cd60e84ee657
 Provides:       bundled(golang(github.com/kr/pretty)) = 0.1.0
-Provides:       bundled(golang(github.com/lib/pq)) = 1.0.0
-Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.4
+Provides:       bundled(golang(github.com/lib/pq)) = 1.1.1
+Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.7
 Provides:       bundled(golang(github.com/minio/sha256-simd)) = cc1980cb0338
 Provides:       bundled(golang(github.com/onsi/ginkgo)) = 6c46eb8334b3
 Provides:       bundled(golang(github.com/onsi/gomega)) = ba3724c94e4d
-Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.1.0
+Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.3.0
 Provides:       bundled(golang(github.com/oschwald/maxminddb-golang)) = 26fe5ace1c70
 Provides:       bundled(golang(github.com/petermattis/goid)) = 3db12ebb2a59
 Provides:       bundled(golang(github.com/pkg/errors)) = 0.8.1
@@ -325,6 +325,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Jun 04 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.4-1
+- Update to version 1.1.4.
+
 * Tue May 21 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.3-1
 - Update to version 1.1.3.
 
