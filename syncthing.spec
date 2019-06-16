@@ -1,7 +1,9 @@
+%bcond_with devel
+
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        1.1.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -96,6 +98,7 @@ that control is returned to you.
 This package contains the syncthing client binary and systemd services.
 
 
+%if %{with devel}
 %package        devel
 Summary:        Continuous File Synchronization (development files)
 BuildArch:      noarch
@@ -109,6 +112,7 @@ that control is returned to you.
 
 This package contains the syncthing sources, which are needed as
 dependency for building packages using syncthing.
+%endif
 
 
 %package        tools
@@ -222,7 +226,9 @@ for i in $(find -name "*.go" -executable -print); do
     chmod a-x $i;
 done
 
+%if %{with devel}
 %goinstall
+%endif
 
 
 %check
@@ -319,12 +325,17 @@ export GO111MODULE=off
 %{_bindir}/stcli
 
 
+%if %{with devel}
 %files devel -f devel.file-list
 %license LICENSE
 %doc README.md AUTHORS
+%endif
 
 
 %changelog
+* Sun Jun 16 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.4-2
+- Disable building -devel package by default.
+
 * Tue Jun 04 2019 Fabio Valentini <decathorpe@gmail.com> - 1.1.4-1
 - Update to version 1.1.4.
 
