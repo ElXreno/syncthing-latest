@@ -3,7 +3,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        1.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -338,6 +338,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Tue Jul 09 2019 Fabio Valentini <decathorpe@gmail.com> - 1.2.0-1
 - Update to version 1.2.0.
 
