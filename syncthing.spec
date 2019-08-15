@@ -2,8 +2,8 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.2.0
-Release:        2%{?dist}
+Version:        1.2.1
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -57,9 +57,9 @@ Provides:       bundled(golang(github.com/golang/groupcache)) = 84a468cf14b4
 Provides:       bundled(golang(github.com/jackpal/gateway)) = 5795ac81146e
 Provides:       bundled(golang(github.com/kballard/go-shellquote)) = cd60e84ee657
 Provides:       bundled(golang(github.com/kr/pretty)) = 0.1.0
-Provides:       bundled(golang(github.com/lib/pq)) = 1.1.1
+Provides:       bundled(golang(github.com/lib/pq)) = 1.2.0
 Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.11.2
-Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.2.1
+Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.3.0
 Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.7
 Provides:       bundled(golang(github.com/minio/sha256-simd)) = cc1980cb0338
 Provides:       bundled(golang(github.com/onsi/ginkgo)) = 1.8.0
@@ -71,14 +71,14 @@ Provides:       bundled(golang(github.com/pkg/errors)) = 0.8.1
 Provides:       bundled(golang(github.com/prometheus/client_golang)) = 0.9.4
 Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = e181e095bae9
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
-Provides:       bundled(golang(github.com/syncthing/notify)) = 4e389ea6c0d8
+Provides:       bundled(golang(github.com/syncthing/notify)) = 69c7a957d3e2
 Provides:       bundled(golang(github.com/syndtr/goleveldb)) = c3a204f8e965
 Provides:       bundled(golang(github.com/thejerf/suture)) = 3.0.2+incompatible
 Provides:       bundled(golang(github.com/urfave/cli)) = 1.20.0
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
 Provides:       bundled(golang(golang.org/x/crypto)) = 5c40567a22f8
 Provides:       bundled(golang(golang.org/x/net)) = d28f0bde5980
-Provides:       bundled(golang(golang.org/x/sys)) = 5ed2794edfdc
+Provides:       bundled(golang(golang.org/x/sys)) = 04f50cda93cb
 Provides:       bundled(golang(golang.org/x/text)) = 0.3.2
 Provides:       bundled(golang(golang.org/x/time)) = 6dc17368e09b
 Provides:       bundled(golang(gopkg.in/asn1-ber.v1)) = 379148ca0225
@@ -338,6 +338,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Thu Aug 15 2019 Fabio Valentini <decathorpe@gmail.com> - 1.2.1-1
+- Update to version 1.2.1.
+
 * Sat Jul 27 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
