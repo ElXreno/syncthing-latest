@@ -2,7 +2,7 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.2.1
+Version:        1.2.2
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
@@ -43,7 +43,6 @@ Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c
 Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = c55ef6137fc6
 Provides:       bundled(golang(github.com/AudriusButkevicius/recli)) = 0.0.5
 Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d8f27e
-Provides:       bundled(golang(github.com/calmh/du)) = 1.0.1
 Provides:       bundled(golang(github.com/calmh/xdr)) = 1.1.0
 Provides:       bundled(golang(github.com/ccding/go-stun)) = be486d185f3d
 Provides:       bundled(golang(github.com/certifi/gocertifi)) = d2eda7129713
@@ -71,10 +70,11 @@ Provides:       bundled(golang(github.com/pkg/errors)) = 0.8.1
 Provides:       bundled(golang(github.com/prometheus/client_golang)) = 0.9.4
 Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = e181e095bae9
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
+Provides:       bundled(golang(github.com/shirou/gopsutil)) = 47ef3260b6bf
 Provides:       bundled(golang(github.com/syncthing/notify)) = 69c7a957d3e2
 Provides:       bundled(golang(github.com/syndtr/goleveldb)) = c3a204f8e965
 Provides:       bundled(golang(github.com/thejerf/suture)) = 3.0.2+incompatible
-Provides:       bundled(golang(github.com/urfave/cli)) = 1.20.0
+Provides:       bundled(golang(github.com/urfave/cli)) = 1.21.0
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
 Provides:       bundled(golang(golang.org/x/crypto)) = 5c40567a22f8
 Provides:       bundled(golang(golang.org/x/net)) = d28f0bde5980
@@ -84,7 +84,6 @@ Provides:       bundled(golang(golang.org/x/time)) = 6dc17368e09b
 Provides:       bundled(golang(gopkg.in/asn1-ber.v1)) = 379148ca0225
 Provides:       bundled(golang(gopkg.in/check.v1)) = 788fd7840127
 Provides:       bundled(golang(gopkg.in/ldap.v2)) = 2.5.1
-Provides:       bundled(golang(gopkg.in/yaml.v2)) = 2.2.2
 
 # an inotify filesystem watcher is integrated with syncthing now
 Provides:       syncthing-inotify = 0.8.7-5
@@ -338,6 +337,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Thu Sep 05 2019 Fabio Valentini <decathorpe@gmail.com> - 1.2.2-1
+- Update to version 1.2.2.
+
 * Thu Aug 15 2019 Fabio Valentini <decathorpe@gmail.com> - 1.2.1-1
 - Update to version 1.2.1.
 
