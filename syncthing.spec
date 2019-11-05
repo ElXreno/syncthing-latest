@@ -2,7 +2,7 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.3.0
+Version:        1.3.1
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
@@ -63,7 +63,7 @@ Provides:       bundled(golang(github.com/lib/pq)) = 1.2.0
 Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.12.0
 Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.3.0
 Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.9
-Provides:       bundled(golang(github.com/minio/sha256-simd)) = 0.1.0
+Provides:       bundled(golang(github.com/minio/sha256-simd)) = 0.1.1
 Provides:       bundled(golang(github.com/onsi/ginkgo)) = 1.9.0
 Provides:       bundled(golang(github.com/onsi/gomega)) = 1.6.0
 Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.3.0
@@ -77,9 +77,9 @@ Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = cac0b30c2563
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
 Provides:       bundled(golang(github.com/shirou/gopsutil)) = 47ef3260b6bf
 Provides:       bundled(golang(github.com/syncthing/notify)) = 69c7a957d3e2
-Provides:       bundled(golang(github.com/syndtr/goleveldb)) = c3a204f8e965
+Provides:       bundled(golang(github.com/syndtr/goleveldb)) = 758128399b1d
 Provides:       bundled(golang(github.com/thejerf/suture)) = 3.0.2+incompatible
-Provides:       bundled(golang(github.com/urfave/cli)) = 1.21.0
+Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.1
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
 Provides:       bundled(golang(golang.org/x/crypto)) = 9756ffdc2472
 Provides:       bundled(golang(golang.org/x/net)) = ba9fcec4b297
@@ -180,15 +180,24 @@ go run build.go assets
 rm build.go
 popd
 
-# set variables expected by syncthing binaries as additional LDFLAGS
+# set variables expected by syncthing binaries as additional FOOFLAGS
 export BUILD_HOST=fedora-koji
-export LDFLAGS="-X %{goipath}/lib/build.Version=v%{version} -X %{goipath}/lib/build.Stamp=$(date +%s) -X %{goipath}/lib/build.User=$USER -X %{goipath}/lib/build.Host=$BUILD_HOST"
+export COMMON_LDFLAGS="-X %{goipath}/lib/build.Version=v%{version} -X %{goipath}/lib/build.Stamp=$SOURCE_DATE_EPOCH -X %{goipath}/lib/build.User=$USER -X %{goipath}/lib/build.Host=$BUILD_HOST"
 export BUILDTAGS="noupgrade"
 
+export LDFLAGS="-X %{goipath}/lib/build.Program=syncthing $COMMON_LDFLAGS"
 %gobuild -o _bin/syncthing %{goipath}/cmd/syncthing
+
+export LDFLAGS="-X %{goipath}/lib/build.Program=stdiscosrv $COMMON_LDFLAGS"
 %gobuild -o _bin/stdiscosrv %{goipath}/cmd/stdiscosrv
+
+export LDFLAGS="-X %{goipath}/lib/build.Program=strelaysrv $COMMON_LDFLAGS"
 %gobuild -o _bin/strelaysrv %{goipath}/cmd/strelaysrv
+
+export LDFLAGS="-X %{goipath}/lib/build.Program=strelaypoolsrv $COMMON_LDFLAGS"
 %gobuild -o _bin/strelaypoolsrv %{goipath}/cmd/strelaypoolsrv
+
+export LDFLAGS="-X %{goipath}/lib/build.Program=stcli $COMMON_LDFLAGS"
 %gobuild -o _bin/stcli %{goipath}/cmd/stcli
 
 
@@ -290,7 +299,7 @@ export GO111MODULE=off
 
 
 %post
-%systemd_post 'syncthing@*.service'
+%systemd_post 'syncthing@.service'
 %systemd_user_post syncthing.service
 
 %preun
@@ -343,6 +352,11 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Nov 05 2019 Fabio Valentini <decathorpe@gmail.com> - 1.3.1-1
+- Update to version 1.3.1.
+- Update build scriptlet to match upstream build system changes.
+- Fix broken systemd_post scriptlet.
+
 * Thu Oct 10 2019 Fabio Valentini <decathorpe@gmail.com> - 1.3.0-1
 - Update to version 1.3.0.
 
