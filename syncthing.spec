@@ -2,7 +2,7 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.3.1
+Version:        1.3.2
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
@@ -53,16 +53,16 @@ Provides:       bundled(golang(github.com/flynn-archive/go-shlex)) = 3f9db97f856
 Provides:       bundled(golang(github.com/getsentry/raven-go)) = 0.2.0
 Provides:       bundled(golang(github.com/go-ole/go-ole)) = 1.2.4
 Provides:       bundled(golang(github.com/gobwas/glob)) = 0.2.3
-Provides:       bundled(golang(github.com/gogo/protobuf)) = 1.3.0
+Provides:       bundled(golang(github.com/gogo/protobuf)) = 1.3.1
 Provides:       bundled(golang(github.com/golang/groupcache)) = 869f871628b6
 Provides:       bundled(golang(github.com/golang/mock)) = 1.3.1
 Provides:       bundled(golang(github.com/jackpal/gateway)) = 1.0.5
 Provides:       bundled(golang(github.com/kballard/go-shellquote)) = 95032a82bc51
 Provides:       bundled(golang(github.com/kr/pretty)) = 0.1.0
 Provides:       bundled(golang(github.com/lib/pq)) = 1.2.0
-Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.12.0
+Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.12.1
 Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.3.0
-Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.9
+Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.10
 Provides:       bundled(golang(github.com/minio/sha256-simd)) = 0.1.1
 Provides:       bundled(golang(github.com/onsi/ginkgo)) = 1.9.0
 Provides:       bundled(golang(github.com/onsi/gomega)) = 1.6.0
@@ -70,9 +70,7 @@ Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.3.0
 Provides:       bundled(golang(github.com/oschwald/maxminddb-golang)) = 1.4.0
 Provides:       bundled(golang(github.com/petermattis/goid)) = b0b1615b78e5
 Provides:       bundled(golang(github.com/pkg/errors)) = 0.8.1
-Provides:       bundled(golang(github.com/prometheus/client_golang)) = 1.1.0
-Provides:       bundled(golang(github.com/prometheus/client_model)) = 14fe0d1b01d4
-Provides:       bundled(golang(github.com/prometheus/procfs)) = 0.0.4
+Provides:       bundled(golang(github.com/prometheus/client_golang)) = 1.2.1
 Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = cac0b30c2563
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
 Provides:       bundled(golang(github.com/shirou/gopsutil)) = 47ef3260b6bf
@@ -83,7 +81,6 @@ Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.1
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
 Provides:       bundled(golang(golang.org/x/crypto)) = 9756ffdc2472
 Provides:       bundled(golang(golang.org/x/net)) = ba9fcec4b297
-Provides:       bundled(golang(golang.org/x/sys)) = 749cb33beabd
 Provides:       bundled(golang(golang.org/x/text)) = 0.3.2
 Provides:       bundled(golang(golang.org/x/time)) = 9d24e82272b4
 Provides:       bundled(golang(gopkg.in/asn1-ber.v1)) = f715ec2f112d
@@ -352,6 +349,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Dec 03 2019 Fabio Valentini <decathorpe@gmail.com> - 1.3.2-1
+- Update to version 1.3.2.
+
 * Tue Nov 05 2019 Fabio Valentini <decathorpe@gmail.com> - 1.3.1-1
 - Update to version 1.3.1.
 - Update build scriptlet to match upstream build system changes.
