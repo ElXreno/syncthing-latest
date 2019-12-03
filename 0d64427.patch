@@ -1,0 +1,104 @@
+From 0d6442721aecadf685a16cca0ef874df468b2009 Mon Sep 17 00:00:00 2001
+From: Simon Frei <freisim93@gmail.com>
+Date: Tue, 3 Dec 2019 15:11:39 +0100
+Subject: [PATCH] lib/protocol: Decrease runtime/mem usage of bufferpool
+ stresstest (ref #6209)
+
+---
+ lib/protocol/bufferpool_test.go | 58 +++++++++++++++++++++------------
+ 1 file changed, 38 insertions(+), 20 deletions(-)
+
+diff --git a/lib/protocol/bufferpool_test.go b/lib/protocol/bufferpool_test.go
+index ab889ba88f..f7c6f67ce3 100644
+--- a/lib/protocol/bufferpool_test.go
++++ b/lib/protocol/bufferpool_test.go
+@@ -3,7 +3,6 @@
+ package protocol
+ 
+ import (
+-	"sync"
+ 	"testing"
+ 	"time"
+ 
+@@ -70,18 +69,47 @@ func TestStressBufferPool(t *testing.T) {
+ 	}
+ 
+ 	const routines = 10
+-	const runtime = 2 * time.Second
+ 
+ 	bp := newBufferPool()
+-	t0 := time.Now()
+ 
+-	var wg sync.WaitGroup
++	timeout := time.After(2 * time.Second)
++	done := make(chan struct{})
++	checkDone := func() bool {
++		if bp.puts == 0 || bp.skips == 0 || bp.misses == 0 {
++			return false
++		}
++		var hits int64
++		for _, h := range bp.hits {
++			hits += h
++		}
++		return hits > 0
++	}
++
++	go func() {
++		for {
++			select {
++			case <-time.After(50 * time.Millisecond):
++				if checkDone() {
++					close(done)
++					return
++				}
++			case <-timeout:
++				return
++			}
++		}
++	}()
++
+ 	fail := make(chan struct{}, routines)
+ 	for i := 0; i < routines; i++ {
+-		wg.Add(1)
+ 		go func() {
+-			defer wg.Done()
+-			for time.Since(t0) < runtime {
++			for {
++				select {
++				case <-done:
++					return
++				case <-timeout:
++					return
++				default:
++				}
+ 				blocks := make([][]byte, 10)
+ 				for i := range blocks {
+ 					// Request a block of random size with the range
+@@ -101,24 +129,14 @@ func TestStressBufferPool(t *testing.T) {
+ 		}()
+ 	}
+ 
+-	wg.Wait()
+ 	select {
+ 	case <-fail:
+ 		t.Fatal("a block was bad size")
++	case <-done:
++	case <-timeout:
++		t.Fatal("timed out before exercising all paths")
+ 	default:
+ 	}
+-
+-	t.Log(bp.puts, bp.skips, bp.misses, bp.hits)
+-	if bp.puts == 0 || bp.skips == 0 || bp.misses == 0 {
+-		t.Error("didn't exercise some paths")
+-	}
+-	var hits int64
+-	for _, h := range bp.hits {
+-		hits += h
+-	}
+-	if hits == 0 {
+-		t.Error("didn't exercise some paths")
+-	}
+ }
+ 
+ func shouldPanic(t *testing.T, fn func()) {

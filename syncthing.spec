@@ -3,7 +3,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        1.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -18,6 +18,10 @@ License:        MPLv2.0 and MIT and OFL and CC-BY and ASL 2.0 and BSD and Unlice
 
 URL:            https://syncthing.net
 Source0:        %{gourl}/releases/download/%{tag}/%{name}-source-%{tag}.tar.gz
+
+# proposed patch to fix tests running out of memory on 32 bit arches
+# See: https://github.com/syncthing/syncthing/issues/6209
+Patch0:         https://github.com/imsodin/syncthing/commit/0d64427.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  systemd
@@ -349,6 +353,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Dec 03 2019 Fabio Valentini <decathorpe@gmail.com> - 1.3.2-2
+- Add proposed patch to fix tests running out of memory on 32 bit arches.
+
 * Tue Dec 03 2019 Fabio Valentini <decathorpe@gmail.com> - 1.3.2-1
 - Update to version 1.3.2.
 
