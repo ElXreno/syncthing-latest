@@ -2,8 +2,8 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.3.2
-Release:        2%{?dist}
+Version:        1.3.3
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -81,7 +81,7 @@ Provides:       bundled(golang(github.com/shirou/gopsutil)) = 47ef3260b6bf
 Provides:       bundled(golang(github.com/syncthing/notify)) = 69c7a957d3e2
 Provides:       bundled(golang(github.com/syndtr/goleveldb)) = 758128399b1d
 Provides:       bundled(golang(github.com/thejerf/suture)) = 3.0.2+incompatible
-Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.1
+Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.2
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
 Provides:       bundled(golang(golang.org/x/crypto)) = 9756ffdc2472
 Provides:       bundled(golang(golang.org/x/net)) = ba9fcec4b297
@@ -353,6 +353,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Wed Jan 08 2020 Fabio Valentini <decathorpe@gmail.com> - 1.3.3-1
+- Update to version 1.3.3.
+
 * Tue Dec 03 2019 Fabio Valentini <decathorpe@gmail.com> - 1.3.2-2
 - Add proposed patch to fix tests running out of memory on 32 bit arches.
 
