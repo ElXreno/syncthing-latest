@@ -2,8 +2,8 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.3.3
-Release:        2%{?dist}
+Version:        1.3.4
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -43,7 +43,6 @@ Provides:       bundled(jquery-ui) = 1.12.1
 Provides:       bundled(moment) = 2.19.4
 
 # vendored dependencies: automatically generated from go.mod
-Provides:       bundled(golang(github.com/AudriusButkevicius/go-nat-pmp)) = 452c97607362
 Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = c55ef6137fc6
 Provides:       bundled(golang(github.com/AudriusButkevicius/recli)) = 0.0.5
 Provides:       bundled(golang(github.com/StackExchange/wmi)) = cbe66965904d
@@ -61,19 +60,19 @@ Provides:       bundled(golang(github.com/gogo/protobuf)) = 1.3.1
 Provides:       bundled(golang(github.com/golang/groupcache)) = 869f871628b6
 Provides:       bundled(golang(github.com/golang/mock)) = 1.3.1
 Provides:       bundled(golang(github.com/jackpal/gateway)) = 1.0.5
+Provides:       bundled(golang(github.com/jackpal/go-nat-pmp)) = 1.0.2
 Provides:       bundled(golang(github.com/kballard/go-shellquote)) = 95032a82bc51
 Provides:       bundled(golang(github.com/kr/pretty)) = 0.1.0
 Provides:       bundled(golang(github.com/lib/pq)) = 1.2.0
 Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.12.1
 Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.3.0
-Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.10
+Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.11
 Provides:       bundled(golang(github.com/minio/sha256-simd)) = 0.1.1
 Provides:       bundled(golang(github.com/onsi/ginkgo)) = 1.9.0
 Provides:       bundled(golang(github.com/onsi/gomega)) = 1.6.0
-Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.3.0
-Provides:       bundled(golang(github.com/oschwald/maxminddb-golang)) = 1.4.0
+Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.4.0
 Provides:       bundled(golang(github.com/petermattis/goid)) = b0b1615b78e5
-Provides:       bundled(golang(github.com/pkg/errors)) = 0.8.1
+Provides:       bundled(golang(github.com/pkg/errors)) = 0.9.0
 Provides:       bundled(golang(github.com/prometheus/client_golang)) = 1.2.1
 Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = cac0b30c2563
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
@@ -353,6 +352,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Feb 04 2020 Fabio Valentini <decathorpe@gmail.com> - 1.3.4-1
+- Update to version 1.3.4.
+
 * Fri Jan 31 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
