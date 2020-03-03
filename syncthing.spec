@@ -3,7 +3,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        1.3.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -232,11 +232,6 @@ cp -pav etc/linux-systemd/system/syncthing@.service %{buildroot}/%{_unitdir}/
 cp -pav etc/linux-systemd/system/syncthing-resume.service %{buildroot}/%{_unitdir}/
 cp -pav etc/linux-systemd/user/syncthing.service %{buildroot}/%{_userunitdir}/
 
-# install systemd preset disabling the service per default
-mkdir -p %{buildroot}/%{_userpresetdir}
-echo "disable syncthing*" > %{buildroot}/%{_userpresetdir}/90-syncthing.preset
-
-
 # Unmark source files as executable
 for i in $(find -name "*.go" -executable -print); do
     chmod a-x $i;
@@ -322,7 +317,6 @@ export GO111MODULE=off
 %{_unitdir}/syncthing@.service
 %{_unitdir}/syncthing-resume.service
 %{_userunitdir}/syncthing.service
-%{_userpresetdir}/90-syncthing.preset
 
 
 %files tools
@@ -352,6 +346,10 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Mar 03 2020 Fabio Valentini <decathorpe@gmail.com> - 1.3.4-2
+- Drop custom systemd user session preset file.
+  See: https://bugzilla.redhat.com/show_bug.cgi?id=1708297
+
 * Tue Feb 04 2020 Fabio Valentini <decathorpe@gmail.com> - 1.3.4-1
 - Update to version 1.3.4.
 
