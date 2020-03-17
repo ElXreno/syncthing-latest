@@ -2,8 +2,8 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.3.4
-Release:        2%{?dist}
+Version:        1.4.0
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -72,16 +72,19 @@ Provides:       bundled(golang(github.com/onsi/ginkgo)) = 1.9.0
 Provides:       bundled(golang(github.com/onsi/gomega)) = 1.6.0
 Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.4.0
 Provides:       bundled(golang(github.com/petermattis/goid)) = b0b1615b78e5
-Provides:       bundled(golang(github.com/pkg/errors)) = 0.9.0
+Provides:       bundled(golang(github.com/pkg/errors)) = 0.9.1
 Provides:       bundled(golang(github.com/prometheus/client_golang)) = 1.2.1
 Provides:       bundled(golang(github.com/rcrowley/go-metrics)) = cac0b30c2563
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
 Provides:       bundled(golang(github.com/shirou/gopsutil)) = 47ef3260b6bf
+Provides:       bundled(golang(github.com/spaolacci/murmur3)) = 1.1.0
 Provides:       bundled(golang(github.com/syncthing/notify)) = 69c7a957d3e2
 Provides:       bundled(golang(github.com/syndtr/goleveldb)) = 758128399b1d
 Provides:       bundled(golang(github.com/thejerf/suture)) = 3.0.2+incompatible
 Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.2
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
+Provides:       bundled(golang(github.com/willf/bitset)) = 1.1.10
+Provides:       bundled(golang(github.com/willf/bloom)) = 2.0.3+incompatible
 Provides:       bundled(golang(golang.org/x/crypto)) = 9756ffdc2472
 Provides:       bundled(golang(golang.org/x/net)) = ba9fcec4b297
 Provides:       bundled(golang(golang.org/x/text)) = 0.3.2
@@ -346,6 +349,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Mar 17 2020 Fabio Valentini <decathorpe@gmail.com> - 1.4.0-1
+- Update to version 1.4.0.
+
 * Tue Mar 03 2020 Fabio Valentini <decathorpe@gmail.com> - 1.3.4-2
 - Drop custom systemd user session preset file.
   See: https://bugzilla.redhat.com/show_bug.cgi?id=1708297
