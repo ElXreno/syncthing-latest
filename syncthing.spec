@@ -2,7 +2,7 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.4.2
+Version:        1.5.0
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
@@ -54,22 +54,20 @@ Provides:       bundled(golang(github.com/chmduquesne/rollinghash)) = a60f8e7142
 Provides:       bundled(golang(github.com/d4l3k/messagediff)) = 1.2.1
 Provides:       bundled(golang(github.com/flynn-archive/go-shlex)) = 3f9db97f8568
 Provides:       bundled(golang(github.com/getsentry/raven-go)) = 0.2.0
+Provides:       bundled(golang(github.com/go-ldap/ldap/v3)) = 3.1.7
 Provides:       bundled(golang(github.com/go-ole/go-ole)) = 1.2.4
 Provides:       bundled(golang(github.com/gobwas/glob)) = 0.2.3
 Provides:       bundled(golang(github.com/gogo/protobuf)) = 1.3.1
 Provides:       bundled(golang(github.com/golang/groupcache)) = 869f871628b6
-Provides:       bundled(golang(github.com/golang/mock)) = 1.3.1
-Provides:       bundled(golang(github.com/jackpal/gateway)) = 1.0.5
+Provides:       bundled(golang(github.com/jackpal/gateway)) = 1.0.6
 Provides:       bundled(golang(github.com/jackpal/go-nat-pmp)) = 1.0.2
 Provides:       bundled(golang(github.com/kballard/go-shellquote)) = 95032a82bc51
-Provides:       bundled(golang(github.com/kr/pretty)) = 0.1.0
+Provides:       bundled(golang(github.com/kr/pretty)) = 0.2.0
 Provides:       bundled(golang(github.com/lib/pq)) = 1.2.0
-Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.12.1
+Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.14.4
 Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.3.0
 Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.11
 Provides:       bundled(golang(github.com/minio/sha256-simd)) = 0.1.1
-Provides:       bundled(golang(github.com/onsi/ginkgo)) = 1.9.0
-Provides:       bundled(golang(github.com/onsi/gomega)) = 1.6.0
 Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.4.0
 Provides:       bundled(golang(github.com/petermattis/goid)) = b0b1615b78e5
 Provides:       bundled(golang(github.com/pkg/errors)) = 0.9.1
@@ -85,13 +83,12 @@ Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.2
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92db6b0
 Provides:       bundled(golang(github.com/willf/bitset)) = 1.1.10
 Provides:       bundled(golang(github.com/willf/bloom)) = 2.0.3+incompatible
-Provides:       bundled(golang(golang.org/x/crypto)) = 9756ffdc2472
+Provides:       bundled(golang(golang.org/x/crypto)) = 2aa609cf4a9d
 Provides:       bundled(golang(golang.org/x/net)) = ba9fcec4b297
+Provides:       bundled(golang(golang.org/x/sys)) = c709ea063b76
 Provides:       bundled(golang(golang.org/x/text)) = 0.3.2
 Provides:       bundled(golang(golang.org/x/time)) = 9d24e82272b4
-Provides:       bundled(golang(gopkg.in/asn1-ber.v1)) = f715ec2f112d
 Provides:       bundled(golang(gopkg.in/check.v1)) = 788fd7840127
-Provides:       bundled(golang(gopkg.in/ldap.v2)) = 2.5.1
 
 # an inotify filesystem watcher is integrated with syncthing now
 Provides:       syncthing-inotify = 0.8.7-5
@@ -349,6 +346,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Sat May 09 2020 Fabio Valentini <decathorpe@gmail.com> - 1.5.0-1
+- Update to version 1.5.0.
+
 * Wed Apr 08 2020 Fabio Valentini <decathorpe@gmail.com> - 1.4.2-1
 - Update to version 1.4.2.
 
