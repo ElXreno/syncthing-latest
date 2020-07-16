@@ -2,7 +2,7 @@
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.7.0
+Version:        1.7.1
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
@@ -343,6 +343,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Thu Jul 16 2020 Fabio Valentini <decathorpe@gmail.com> - 1.7.1-1
+- Update to version 1.7.1.
+
 * Tue Jul 07 2020 Fabio Valentini <decathorpe@gmail.com> - 1.7.0-1
 - Update to version 1.7.0.
 
