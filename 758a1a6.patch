@@ -1,0 +1,22 @@
+From 758a1a6a3729e12b8142c45fcc95c08bc188da28 Mon Sep 17 00:00:00 2001
+From: Audrius Butkevicius <audrius.butkevicius@gmail.com>
+Date: Wed, 19 Aug 2020 06:56:35 +0100
+Subject: [PATCH] lib/fs: Disable ioctl on ppc (fixes #6898) (#6901)
+
+---
+ lib/fs/basicfs_copy_range_ioctl.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/fs/basicfs_copy_range_ioctl.go b/lib/fs/basicfs_copy_range_ioctl.go
+index 9d166c6de0..c11f65c4b3 100644
+--- a/lib/fs/basicfs_copy_range_ioctl.go
++++ b/lib/fs/basicfs_copy_range_ioctl.go
+@@ -4,7 +4,7 @@
+ // License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ // You can obtain one at https://mozilla.org/MPL/2.0/.
+ 
+-// +build linux
++// +build linux,!ppc,!ppc64,!ppc64le
+ 
+ package fs
+ 

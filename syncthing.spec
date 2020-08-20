@@ -3,7 +3,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        1.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{version}
@@ -14,7 +14,7 @@ Release:        1%{?dist}
 # - angular, bootstrap, daterangepicker, fancytree, jQuery, moment (MIT),
 # - ForkAwesome (MIT and OFL and CC-BY 3.0), and
 # - a number of go packages (MIT and MPLv2.0 and BSD and ASL 2.0 and CC0 and ISC)
-License:        MPLv2.0 and MIT and OFL and CC-BY and ASL 2.0 and BSD and Unlicense and ISC
+License:        MPLv2.0 and MIT and OFL and CC-BY and BSD and ASL 2.0 and CC0 and ISC
 
 URL:            https://syncthing.net
 # use official release tarball (contains vendored dependencies)
@@ -23,6 +23,10 @@ Source0:        %{gourl}/releases/download/%{tag}/%{name}-source-%{tag}.tar.gz
 # rejected patch to fix tests running out of memory on 32 bit arches
 # See: https://github.com/syncthing/syncthing/issues/6209
 Patch0:         https://github.com/imsodin/syncthing/commit/0d64427.patch
+
+# upstream patch to fix builds and tests on ppc64 due to invalid ioctl
+# See: https://github.com/syncthing/syncthing/issues/6898
+Patch1:         https://github.com/syncthing/syncthing/commit/758a1a6.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  systemd
@@ -444,6 +448,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Thu Aug 20 2020 Fabio Valentini <decathorpe@gmail.com> - 1.8.0-2
+- Include upstream patch to fix issues on ppc64le.
+
 * Sun Aug 16 2020 Fabio Valentini <decathorpe@gmail.com> - 1.8.0-1
 - Update to version 1.8.0.
 
