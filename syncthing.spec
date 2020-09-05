@@ -1,12 +1,16 @@
 %bcond_with devel
 
+%global basever     1.9.0
+%global prerel      rc
+%global prerelnum   5
+
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        1.8.0
-Release:        2%{?dist}
+Version:        %{basever}%{?prerel:~%{prerel}%{prerelnum}}
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
-%global tag     v%{version}
+%global tag     v%{basever}%{?prerel:-%{prerel}.%{prerelnum}}
 
 %gometa
 
@@ -23,10 +27,6 @@ Source0:        %{gourl}/releases/download/%{tag}/%{name}-source-%{tag}.tar.gz
 # rejected patch to fix tests running out of memory on 32 bit arches
 # See: https://github.com/syncthing/syncthing/issues/6209
 Patch0:         https://github.com/imsodin/syncthing/commit/0d64427.patch
-
-# upstream patch to fix builds and tests on ppc64 due to invalid ioctl
-# See: https://github.com/syncthing/syncthing/issues/6898
-Patch1:         https://github.com/syncthing/syncthing/commit/758a1a6.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  systemd
@@ -94,8 +94,6 @@ Provides:       bundled(golang(github.com/dgryski/go-farm)) = 6a90982
 Provides:       bundled(golang(github.com/dustin/go-humanize)) = 1.0.0
 # github.com/flynn-archive/go-shlex : ASL 2.0
 Provides:       bundled(golang(github.com/flynn-archive/go-shlex)) = 3f9db97
-# github.com/francoispqt/gojay : MIT
-Provides:       bundled(golang(github.com/francoispqt/gojay)) = 1.2.13
 # github.com/getsentry/raven-go : BSD
 Provides:       bundled(golang(github.com/getsentry/raven-go)) = 0.2.0
 # github.com/go-asn1-ber/asn1-ber : MIT
@@ -109,9 +107,9 @@ Provides:       bundled(golang(github.com/gobwas/glob)) = 0.2.3
 # github.com/gogo/protobuf : BSD
 Provides:       bundled(golang(github.com/gogo/protobuf)) = 1.3.1
 # github.com/golang/groupcache : ASL 2.0
-Provides:       bundled(golang(github.com/golang/groupcache)) = 869f871
+Provides:       bundled(golang(github.com/golang/groupcache)) = 611e8ac
 # github.com/golang/protobuf : BSD
-Provides:       bundled(golang(github.com/golang/protobuf)) = 1.4.0
+Provides:       bundled(golang(github.com/golang/protobuf)) = 1.4.2
 # github.com/golang/snappy : BSD
 Provides:       bundled(golang(github.com/golang/snappy)) = 0.0.1
 # github.com/greatroar/blobloom : ASL 2.0
@@ -125,9 +123,11 @@ Provides:       bundled(golang(github.com/kballard/go-shellquote)) = 95032a8
 # github.com/lib/pq : MIT
 Provides:       bundled(golang(github.com/lib/pq)) = 1.2.0
 # github.com/lucas-clemente/quic-go : MIT
-Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.17.3
+Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.18.0
 # github.com/marten-seemann/qtls : BSD
-Provides:       bundled(golang(github.com/marten-seemann/qtls)) = 0.9.1
+Provides:       bundled(golang(github.com/marten-seemann/qtls)) = 0.10.0
+# github.com/marten-seemann/qtls-go1-15 : BSD
+Provides:       bundled(golang(github.com/marten-seemann/qtls-go1-15)) = 0.1.0
 # github.com/maruel/panicparse : ASL 2.0
 Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.3.0
 # github.com/mattn/go-isatty : MIT
@@ -159,13 +159,13 @@ Provides:       bundled(golang(github.com/russross/blackfriday/v2)) = 2.0.1
 # github.com/sasha-s/go-deadlock : ASL 2.0
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
 # github.com/shirou/gopsutil : BSD
-Provides:       bundled(golang(github.com/shirou/gopsutil)) = 47ef326
+Provides:       bundled(golang(github.com/shirou/gopsutil)) = 2.20.7
 # github.com/shurcooL/sanitized_anchor_name : MIT
 Provides:       bundled(golang(github.com/shurcooL/sanitized_anchor_name)) = 1.0.0
 # github.com/syncthing/notify : MIT
 Provides:       bundled(golang(github.com/syncthing/notify)) = 69c7a95
 # github.com/syndtr/goleveldb : BSD
-Provides:       bundled(golang(github.com/syndtr/goleveldb)) = 7581283
+Provides:       bundled(golang(github.com/syndtr/goleveldb)) = d9e9293
 # github.com/thejerf/suture : MIT
 Provides:       bundled(golang(github.com/thejerf/suture)) = 3.0.2+incompatible
 # github.com/urfave/cli : MIT
@@ -173,17 +173,17 @@ Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.2
 # github.com/vitrun/qart : ASL 2.0 and BSD
 Provides:       bundled(golang(github.com/vitrun/qart)) = bf64b92
 # golang.org/x/crypto : BSD
-Provides:       bundled(golang(golang.org/x/crypto)) = 4bdfaf4
+Provides:       bundled(golang(golang.org/x/crypto)) = 123391f
 # golang.org/x/net : BSD
-Provides:       bundled(golang(golang.org/x/net)) = ba9fcec
+Provides:       bundled(golang(golang.org/x/net)) = 3edf25e
 # golang.org/x/sys : BSD
-Provides:       bundled(golang(golang.org/x/sys)) = d5e6a3e
+Provides:       bundled(golang(golang.org/x/sys)) = d785dc2
 # golang.org/x/text: BSD
 Provides:       bundled(golang(golang.org/x/text)) = 0.3.3
 # golang.org/x/text : BSD
 Provides:       bundled(golang(golang.org/x/time)) = 9d24e82
 # google.golang.org/protobuf : BSD
-Provides:       bundled(golang(google.golang.org/protobuf)) = 1.23.0
+Provides:       bundled(golang(google.golang.org/protobuf)) = 1.25.0
 
 # an inotify filesystem watcher is integrated with syncthing now
 Provides:       syncthing-inotify = 0.8.7-5
@@ -278,10 +278,7 @@ popd
 # set variables expected by syncthing binaries as additional FOOFLAGS
 export BUILD_HOST=fedora-koji
 export COMMON_LDFLAGS="-X %{goipath}/lib/build.Version=v%{version} -X %{goipath}/lib/build.Stamp=$SOURCE_DATE_EPOCH -X %{goipath}/lib/build.User=$USER -X %{goipath}/lib/build.Host=$BUILD_HOST"
-# temporarily disable quic support (broken with Go 1.15):
-# https://github.com/syncthing/syncthing/issues/6889
-# https://github.com/lucas-clemente/quic-go/issues/2614
-export BUILDTAGS="noupgrade noquic"
+export BUILDTAGS="noupgrade"
 
 export LDFLAGS="-X %{goipath}/lib/build.Program=syncthing $COMMON_LDFLAGS"
 %gobuild -o _bin/syncthing %{goipath}/cmd/syncthing
@@ -347,15 +344,12 @@ export GO111MODULE=off
 
 %gotest %{goipath}/cmd/stdiscosrv
 %gotest %{goipath}/cmd/strelaypoolsrv
-# temporarily disable due to quic-go incompatibility with Go 1.15
-#%%gotest %%{goipath}/cmd/syncthing
+%gotest %{goipath}/cmd/syncthing
 
-# temporarily disable due to quic-go incompatibility with Go 1.15
-#%%gotest %%{goipath}/lib/api
+%gotest %{goipath}/lib/api
 %gotest %{goipath}/lib/beacon
 %gotest %{goipath}/lib/config
-# temporarily disable due to quic-go incompatibility with Go 1.15
-#%%gotest %%{goipath}/lib/connections
+%gotest %{goipath}/lib/connections
 %gotest %{goipath}/lib/db
 %gotest %{goipath}/lib/dialer
 %gotest %{goipath}/lib/discover
@@ -366,8 +360,7 @@ export GO111MODULE=off
 
 # This test sometimes fails dependent on load on some architectures:
 # https://github.com/syncthing/syncthing/issues/4370
-# temporarily disable due to quic-go incompatibility with Go 1.15
-#%%gotest %%{goipath}/lib/model || :
+%gotest %{goipath}/lib/model || :
 
 %gotest %{goipath}/lib/nat
 %gotest %{goipath}/lib/osutil
@@ -380,8 +373,7 @@ export GO111MODULE=off
 %gotest %{goipath}/lib/signature
 %gotest %{goipath}/lib/stats
 %gotest %{goipath}/lib/sync
-# temporarily disable due to quic-go incompatibility with Go 1.15
-#%%gotest %%{goipath}/lib/syncthing
+%gotest %{goipath}/lib/syncthing
 %gotest %{goipath}/lib/tlsutil
 %gotest %{goipath}/lib/upgrade
 %gotest %{goipath}/lib/upnp
@@ -448,6 +440,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Sat Sep 05 2020 Carl George <carl@george.computer> - 1.9.0~rc5-1
+- Update to version 1.9.0-rc.5
+
 * Thu Aug 20 2020 Fabio Valentini <decathorpe@gmail.com> - 1.8.0-2
 - Include upstream patch to fix issues on ppc64le.
 
