@@ -7,7 +7,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?prerel:~%{prerel}%{prerelnum}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?prerel:-%{prerel}.%{prerelnum}}
@@ -277,7 +277,7 @@ popd
 
 # set variables expected by syncthing binaries as additional FOOFLAGS
 export BUILD_HOST=fedora-koji
-export COMMON_LDFLAGS="-X %{goipath}/lib/build.Version=v%{version} -X %{goipath}/lib/build.Stamp=$SOURCE_DATE_EPOCH -X %{goipath}/lib/build.User=$USER -X %{goipath}/lib/build.Host=$BUILD_HOST"
+export COMMON_LDFLAGS="-X %{goipath}/lib/build.Version=%{tag} -X %{goipath}/lib/build.Stamp=$SOURCE_DATE_EPOCH -X %{goipath}/lib/build.User=$USER -X %{goipath}/lib/build.Host=$BUILD_HOST"
 export BUILDTAGS="noupgrade"
 
 export LDFLAGS="-X %{goipath}/lib/build.Program=syncthing $COMMON_LDFLAGS"
@@ -440,6 +440,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Mon Sep 07 2020 Fabio Valentini <decathorpe@gmail.com> - 1.9.0~rc5-2
+- Use correct version format for build flags.
+
 * Sat Sep 05 2020 Carl George <carl@george.computer> - 1.9.0~rc5-1
 - Update to version 1.9.0-rc.5
 
