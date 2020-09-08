@@ -1,13 +1,13 @@
 %bcond_with devel
 
 %global basever     1.9.0
-%global prerel      rc
-%global prerelnum   5
+#%%global prerel      rc
+#%%global prerelnum   5
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?prerel:~%{prerel}%{prerelnum}}
-Release:        2%{?dist}
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?prerel:-%{prerel}.%{prerelnum}}
@@ -440,6 +440,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Sep 08 2020 Fabio Valentini <decathorpe@gmail.com> - 1.9.0-1
+- Update to version 1.9.0.
+
 * Mon Sep 07 2020 Fabio Valentini <decathorpe@gmail.com> - 1.9.0~rc5-2
 - Use correct version format for build flags.
 
