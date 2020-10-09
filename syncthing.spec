@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever     1.9.0
+%global basever     1.10.0
 #%%global prerel      rc
 #%%global prerelnum   5
 
@@ -120,6 +120,8 @@ Provides:       bundled(golang(github.com/jackpal/gateway)) = 1.0.6
 Provides:       bundled(golang(github.com/jackpal/go-nat-pmp)) = 1.0.2
 # github.com/kballard/go-shellquote : MIT
 Provides:       bundled(golang(github.com/kballard/go-shellquote)) = 95032a8
+# github.com/kr/pretty : MIT
+Provides:       bundled(golang(github.com/kr/pretty)) = 0.2.0
 # github.com/lib/pq : MIT
 Provides:       bundled(golang(github.com/lib/pq)) = 1.2.0
 # github.com/lucas-clemente/quic-go : MIT
@@ -129,9 +131,9 @@ Provides:       bundled(golang(github.com/marten-seemann/qtls)) = 0.10.0
 # github.com/marten-seemann/qtls-go1-15 : BSD
 Provides:       bundled(golang(github.com/marten-seemann/qtls-go1-15)) = 0.1.0
 # github.com/maruel/panicparse : ASL 2.0
-Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.3.0
+Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.5.1
 # github.com/mattn/go-isatty : MIT
-Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.11
+Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.12
 # github.com/matttproud/golang_protobuf_extensions : ASL 2.0
 Provides:       bundled(golang(github.com/matttproud/golang_protobuf_extensions)) = 1.0.1
 # github.com/minio/sha256-simd : ASL 2.0
@@ -159,7 +161,7 @@ Provides:       bundled(golang(github.com/russross/blackfriday/v2)) = 2.0.1
 # github.com/sasha-s/go-deadlock : ASL 2.0
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
 # github.com/shirou/gopsutil : BSD
-Provides:       bundled(golang(github.com/shirou/gopsutil)) = 2.20.7
+Provides:       bundled(golang(github.com/shirou/gopsutil)) = 2.20.7+incompatible
 # github.com/shurcooL/sanitized_anchor_name : MIT
 Provides:       bundled(golang(github.com/shurcooL/sanitized_anchor_name)) = 1.0.0
 # github.com/syncthing/notify : MIT
@@ -440,6 +442,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Fri Oct 09 2020 Fabio Valentini <decathorpe@gmail.com> - 1.10.0-1
+- Update to version 1.10.0.
+
 * Tue Sep 08 2020 Fabio Valentini <decathorpe@gmail.com> - 1.9.0-1
 - Update to version 1.9.0.
 
