@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever     1.10.0
+%global basever     1.11.0
 #%%global prerel      rc
 #%%global prerelnum   5
 
@@ -179,7 +179,7 @@ Provides:       bundled(golang(golang.org/x/crypto)) = 123391f
 # golang.org/x/net : BSD
 Provides:       bundled(golang(golang.org/x/net)) = 3edf25e
 # golang.org/x/sys : BSD
-Provides:       bundled(golang(golang.org/x/sys)) = d785dc2
+Provides:       bundled(golang(golang.org/x/sys)) = aee5d88
 # golang.org/x/text: BSD
 Provides:       bundled(golang(golang.org/x/text)) = 0.3.3
 # golang.org/x/text : BSD
@@ -442,6 +442,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Nov 03 2020 Fabio Valentini <decathorpe@gmail.com> - 1.11.0-1
+- Update to version 1.11.0.
+
 * Fri Oct 09 2020 Fabio Valentini <decathorpe@gmail.com> - 1.10.0-1
 - Update to version 1.10.0.
 
