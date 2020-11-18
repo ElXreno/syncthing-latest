@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever     1.11.0
+%global basever     1.11.1
 #%%global prerel      rc
 #%%global prerelnum   5
 
@@ -442,6 +442,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Wed Nov 18 2020 Fabio Valentini <decathorpe@gmail.com> - 1.11.1-1
+- Update to version 1.11.1.
+
 * Tue Nov 03 2020 Fabio Valentini <decathorpe@gmail.com> - 1.11.0-1
 - Update to version 1.11.0.
 
