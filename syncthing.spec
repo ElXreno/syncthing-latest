@@ -1,16 +1,15 @@
 %bcond_with devel
 
-%global basever     1.12.0
-#%%global prerel      rc
-#%%global prerelnum   5
+%global basever 1.12.1
+#%%global rcnum   5
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
-Version:        %{basever}%{?prerel:~%{prerel}%{prerelnum}}
+Version:        %{basever}%{?rcnum:~rc%{rcnum}}
 Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
-%global tag     v%{basever}%{?prerel:-%{prerel}.%{prerelnum}}
+%global tag     v%{basever}%{?rcnum:-rc.%{rcnum}}
 
 %gometa
 
@@ -125,11 +124,11 @@ Provides:       bundled(golang(github.com/kballard/go-shellquote)) = 95032a8
 # github.com/lib/pq : MIT
 Provides:       bundled(golang(github.com/lib/pq)) = 1.8.0
 # github.com/lucas-clemente/quic-go : MIT
-Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.18.1
+Provides:       bundled(golang(github.com/lucas-clemente/quic-go)) = 0.19.3
 # github.com/marten-seemann/qtls : BSD
 Provides:       bundled(golang(github.com/marten-seemann/qtls)) = 0.10.0
 # github.com/marten-seemann/qtls-go1-15 : BSD
-Provides:       bundled(golang(github.com/marten-seemann/qtls-go1-15)) = 0.1.0
+Provides:       bundled(golang(github.com/marten-seemann/qtls-go1-15)) = 0.1.1
 # github.com/maruel/panicparse : ASL 2.0
 Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.5.1
 # github.com/mattn/go-isatty : MIT
@@ -171,7 +170,7 @@ Provides:       bundled(golang(github.com/syncthing/notify)) = 9a0e441
 # github.com/syndtr/goleveldb : BSD
 Provides:       bundled(golang(github.com/syndtr/goleveldb)) = d9e9293
 # github.com/thejerf/suture : MIT
-Provides:       bundled(golang(github.com/thejerf/suture)) = 4.0.0+incompatible
+Provides:       bundled(golang(github.com/thejerf/suture/v4)) = 4.0.0
 # github.com/urfave/cli : MIT
 Provides:       bundled(golang(github.com/urfave/cli)) = 1.22.4
 # github.com/vitrun/qart : ASL 2.0 and BSD
@@ -448,6 +447,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Fri Jan 08 2021 Fabio Valentini <decathorpe@gmail.com> - 1.12.1-1
+- Update to version 1.12.1.
+
 * Mon Dec 07 2020 Fabio Valentini <decathorpe@gmail.com> - 1.12.0-1
 - Update to version 1.12.0.
 
