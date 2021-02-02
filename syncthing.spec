@@ -1,8 +1,8 @@
 %bcond_with devel
 
 %global basever     1.13.0
-%global prerel      rc
-%global prerelnum   1
+#%%global prerel      rc
+#%%global prerelnum   1
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
@@ -448,6 +448,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Feb 02 2021 ElXreno <elxreno@gmail.com> - 1.13.0-1
+- Update to version 1.13.0
+
 * Tue Jan 12 10:16:59 +03 2021 ElXreno <elxreno@gmail.com> - 1.13.0~rc1-1
 - Update to version 1.13.0-rc.1
 
