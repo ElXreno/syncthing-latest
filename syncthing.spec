@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever     1.13.0
+%global basever     1.13.1
 #%%global prerel      rc
 #%%global prerelnum   1
 
@@ -448,6 +448,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Wed Feb 03 2021 ElXreno <elxreno@gmail.com> - 1.13.1-1
+- Update to version 1.13.1
+
 * Tue Feb 02 2021 ElXreno <elxreno@gmail.com> - 1.13.0-1
 - Update to version 1.13.0
 
