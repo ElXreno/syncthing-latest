@@ -1,12 +1,12 @@
 %bcond_with devel
 
-%global basever 1.12.1
-#%%global rcnum   5
+%global basever 1.13.1
+#%%global rcnum   0
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?rcnum:~rc%{rcnum}}
-Release:        2%{?dist}
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?rcnum:-rc.%{rcnum}}
@@ -162,11 +162,11 @@ Provides:       bundled(golang(github.com/russross/blackfriday/v2)) = 2.0.1
 # github.com/sasha-s/go-deadlock : ASL 2.0
 Provides:       bundled(golang(github.com/sasha-s/go-deadlock)) = 0.2.0
 # github.com/shirou/gopsutil : BSD
-Provides:       bundled(golang(github.com/shirou/gopsutil)) = 3.20.10+incompatible
+Provides:       bundled(golang(github.com/shirou/gopsutil/v3)) = 3.20.11
 # github.com/shurcooL/sanitized_anchor_name : MIT
 Provides:       bundled(golang(github.com/shurcooL/sanitized_anchor_name)) = 1.0.0
 # github.com/syncthing/notify : MIT
-Provides:       bundled(golang(github.com/syncthing/notify)) = 9a0e441
+Provides:       bundled(golang(github.com/syncthing/notify)) = 17de266
 # github.com/syndtr/goleveldb : BSD
 Provides:       bundled(golang(github.com/syndtr/goleveldb)) = d9e9293
 # github.com/thejerf/suture : MIT
@@ -447,6 +447,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Thu Feb 04 2021 Fabio Valentini <decathorpe@gmail.com> - 1.13.1-1
+- Update to version 1.13.1.
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.12.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
