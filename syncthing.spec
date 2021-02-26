@@ -2,7 +2,7 @@
 
 %global basever     1.14.0
 %global prerel      rc
-%global prerelnum   2
+%global prerelnum   3
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
@@ -448,6 +448,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Fri Feb 26 2021 ElXreno <elxreno@gmail.com> - 1.14.0~rc3-1
+- Update to version 1.14.0-rc.3
+
 * Tue Feb 23 2021 ElXreno <elxreno@gmail.com> - 1.14.0~rc2-1
 - Update to version 1.14.0-rc.2
 
