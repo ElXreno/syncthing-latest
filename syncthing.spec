@@ -6,7 +6,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?rcnum:~rc%{rcnum}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?rcnum:-rc.%{rcnum}}
@@ -447,6 +447,10 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Mar 02 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.13.1-2
+- Rebuilt for updated systemd-rpm-macros
+  See https://pagure.io/fesco/issue/2583.
+
 * Thu Feb 04 2021 Fabio Valentini <decathorpe@gmail.com> - 1.13.1-1
 - Update to version 1.13.1.
 
