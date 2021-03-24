@@ -1,12 +1,12 @@
 %bcond_with devel
 
-%global basever 1.13.1
+%global basever 1.14.0
 #%%global rcnum   0
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?rcnum:~rc%{rcnum}}
-Release:        2%{?dist}
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?rcnum:-rc.%{rcnum}}
@@ -48,10 +48,10 @@ Provides:       bundled(moment) = 2.19.4
 
 # automatically generated Provides for bundled go dependencies
 # manually check licenses for new deps and update License tag if necessary
-# generate with "./vendor2provides.py path/to/vendor/modules.txt")
+# generate with "./vendor2provides.py path/to/vendor/modules.txt"
 
 # github.com/AudriusButkevicius/pfilter : MIT
-Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = c55ef61
+Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 7468b85
 # github.com/AudriusButkevicius/recli : MPLv2.0
 Provides:       bundled(golang(github.com/AudriusButkevicius/recli)) = 0.0.5
 # github.com/Azure/go-ntlmssp : MIT
@@ -113,6 +113,8 @@ Provides:       bundled(golang(github.com/golang/protobuf)) = 1.4.3
 Provides:       bundled(golang(github.com/golang/snappy)) = 0.0.1
 # github.com/greatroar/blobloom : ASL 2.0
 Provides:       bundled(golang(github.com/greatroar/blobloom)) = 0.5.0
+# github.com/hashicorp/golang-lru : MPLv2.0
+Provides:       bundled(golang(github.com/hashicorp/golang-lru)) = 0.5.1
 # github.com/jackpal/gateway : BSD
 Provides:       bundled(golang(github.com/jackpal/gateway)) = 1.0.6
 # github.com/jackpal/go-nat-pmp : ASL 2.0
@@ -447,6 +449,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Wed Mar 24 2021 Fabio Valentini <decathorpe@gmail.com> - 1.14.0-1
+- Update to version 1.14.0.
+
 * Tue Mar 02 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.13.1-2
 - Rebuilt for updated systemd-rpm-macros
   See https://pagure.io/fesco/issue/2583.
