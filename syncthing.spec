@@ -2,12 +2,12 @@
 
 %global basever     1.15.0
 %global prerel      rc
-%global prerelnum   4
+%global prerelnum   6
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?prerel:~%{prerel}%{prerelnum}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?prerel:-%{prerel}.%{prerelnum}}
@@ -448,6 +448,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Fri Mar 26 2021 ElXreno <elxreno@gmail.com> - 1.15.0~rc6-2
+- Update to version 1.15.0-rc.6
+
 * Wed Mar 17 2021 ElXreno <elxreno@gmail.com> - 1.15.0~rc4-1
 - Update to version 1.15.0-rc.4
 
