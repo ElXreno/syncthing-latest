@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever 1.15.0
+%global basever 1.15.1
 #%%global rcnum   0
 
 Name:           syncthing
@@ -298,7 +298,7 @@ export LDFLAGS="-X %{goipath}/lib/build.Program=strelaypoolsrv $COMMON_LDFLAGS"
 %gobuild -o _bin/strelaypoolsrv %{goipath}/cmd/strelaypoolsrv
 
 export LDFLAGS="-X %{goipath}/lib/build.Program=stcli $COMMON_LDFLAGS"
-%gobuild -o _bin/stcli %{goipath}/cmd/stcli
+%gobuild -o _bin/stcli %{goipath}/cmd/syncthing/cli
 
 
 %install
@@ -449,6 +449,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Apr 06 2021 ElXreno <elxreno@gmail.com>
+- Updated to version 1.15.1
+
 * Tue Apr 06 2021 ElXreno <elxreno@gmail.com> - 1.15.0-1
 - Update to version 1.15.0
 
