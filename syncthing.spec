@@ -449,6 +449,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue Apr 06 2021 ElXreno <elxreno@gmail.com> - 1.15.0-1
+- Update to version 1.15.0
+
 * Wed Mar 24 2021 Fabio Valentini <decathorpe@gmail.com> - 1.14.0-1
 - Update to version 1.14.0.
 
