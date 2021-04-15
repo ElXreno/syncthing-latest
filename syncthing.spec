@@ -6,7 +6,7 @@
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?rcnum:~rc%{rcnum}}
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?rcnum:-rc.%{rcnum}}
@@ -67,7 +67,7 @@ Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d
 # github.com/calmh/xdr : MIT
 Provides:       bundled(golang(github.com/calmh/xdr)) = 1.1.0
 # github.com/ccding/go-stun : ASL 2.0
-Provides:       bundled(golang(github.com/ccding/go-stun)) = 0.1.2
+Provides:       bundled(golang(github.com/ccding/go-stun)) = 0.1.3
 # github.com/certifi/gocertifi : MPLv2.0
 Provides:       bundled(golang(github.com/certifi/gocertifi)) = 2c3bb06
 # github.com/cespare/xxhash : MIT
@@ -425,6 +425,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Thu Apr 15 2021 ElXreno <elxreno@gmail.com> - 1.16.0~rc2-2
+- rebuilt
+
 * Thu Apr 15 2021 ElXreno <elxreno@gmail.com> - 1.16.0~rc2-1
 - Update to version 1.16.0-rc.2
 
