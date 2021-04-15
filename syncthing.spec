@@ -56,10 +56,10 @@ Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = 7468b85
 Provides:       bundled(golang(github.com/AudriusButkevicius/recli)) = 0.0.5
 # github.com/Azure/go-ntlmssp : MIT
 Provides:       bundled(golang(github.com/Azure/go-ntlmssp)) = 6637195
-# github.com/DataDog/zstd : BSD
-Provides:       bundled(golang(github.com/DataDog/zstd)) = 1.4.1
 # github.com/StackExchange/wmi : MIT
 Provides:       bundled(golang(github.com/StackExchange/wmi)) = cbe6696
+# github.com/alecthomas/kong : MIT
+Provides:       bundled(golang(github.com/alecthomas/kong)) = 0.2.12
 # github.com/beorn7/perks : MIT
 Provides:       bundled(golang(github.com/beorn7/perks)) = 1.0.1
 # github.com/bkaradzic/go-lz4 : BSD
@@ -71,7 +71,6 @@ Provides:       bundled(golang(github.com/ccding/go-stun)) = 0.1.2
 # github.com/certifi/gocertifi : MPLv2.0
 Provides:       bundled(golang(github.com/certifi/gocertifi)) = 2c3bb06
 # github.com/cespare/xxhash : MIT
-Provides:       bundled(golang(github.com/cespare/xxhash)) = 1.1.0
 Provides:       bundled(golang(github.com/cespare/xxhash/v2)) = 2.1.1
 # github.com/cheekybits/genny : MIT
 Provides:       bundled(golang(github.com/cheekybits/genny)) = 1.0.0
@@ -83,14 +82,6 @@ Provides:       bundled(golang(github.com/cpuguy83/go-md2man/v2)) = f79a8a8
 Provides:       bundled(golang(github.com/d4l3k/messagediff)) = 1.2.1
 # github.com/dchest/siphash : CC0
 Provides:       bundled(golang(github.com/dchest/siphash)) = 1.2.2
-# github.com/dgraph-io/badger : ASL 2.0
-Provides:       bundled(golang(github.com/dgraph-io/badger/v2)) = 2.0.3
-# github.com/dgraph-io/ristretto : ASL 2.0
-Provides:       bundled(golang(github.com/dgraph-io/ristretto)) = 8f368f2
-# github.com/dgryski/go-farm : MIT
-Provides:       bundled(golang(github.com/dgryski/go-farm)) = 6a90982
-# github.com/dustin/go-humanize : MIT
-Provides:       bundled(golang(github.com/dustin/go-humanize)) = 1.0.0
 # github.com/flynn-archive/go-shlex : ASL 2.0
 Provides:       bundled(golang(github.com/flynn-archive/go-shlex)) = 3f9db97
 # github.com/getsentry/raven-go : BSD
@@ -137,10 +128,16 @@ Provides:       bundled(golang(github.com/maruel/panicparse)) = 1.5.1
 Provides:       bundled(golang(github.com/mattn/go-isatty)) = 0.0.12
 # github.com/matttproud/golang_protobuf_extensions : ASL 2.0
 Provides:       bundled(golang(github.com/matttproud/golang_protobuf_extensions)) = 1.0.1
+# github.com/maxbrunsfeld/counterfeiter : MIT
+Provides:       bundled(golang(github.com/maxbrunsfeld/counterfeiter/v6)) = 6.3.0
 # github.com/minio/sha256-simd : ASL 2.0
 Provides:       bundled(golang(github.com/minio/sha256-simd)) = 0.1.1
 # github.com/miscreant/miscreant.go : MIT
 Provides:       bundled(golang(github.com/miscreant/miscreant.go)) = 26d3763
+# github.com/niemeyer/pretty : MIT
+Provides:       bundled(golang(github.com/niemeyer/pretty)) = a10e7ca
+# github.com/onsi/gomega : MIT
+Provides:       bundled(golang(github.com/onsi/gomega)) = 1.10.3
 # github.com/oschwald/geoip2-golang : ISC
 Provides:       bundled(golang(github.com/oschwald/geoip2-golang)) = 1.4.0
 # github.com/oschwald/maxminddb-golang : ISC
@@ -168,7 +165,7 @@ Provides:       bundled(golang(github.com/shirou/gopsutil/v3)) = 3.20.11
 # github.com/shurcooL/sanitized_anchor_name : MIT
 Provides:       bundled(golang(github.com/shurcooL/sanitized_anchor_name)) = 1.0.0
 # github.com/syncthing/notify : MIT
-Provides:       bundled(golang(github.com/syncthing/notify)) = 17de266
+Provides:       bundled(golang(github.com/syncthing/notify)) = f45149b
 # github.com/syndtr/goleveldb : BSD
 Provides:       bundled(golang(github.com/syndtr/goleveldb)) = d9e9293
 # github.com/thejerf/suture : MIT
@@ -182,17 +179,24 @@ Provides:       bundled(golang(golang.org/x/crypto)) = 9e8e0b3
 # golang.org/x/net : BSD
 Provides:       bundled(golang(golang.org/x/net)) = ff519b6
 # golang.org/x/sys : BSD
-Provides:       bundled(golang(golang.org/x/sys)) = da20708
+Provides:       bundled(golang(golang.org/x/sys)) = b64e53b
 # golang.org/x/text: BSD
 Provides:       bundled(golang(golang.org/x/text)) = 0.3.4
 # golang.org/x/time : BSD
 Provides:       bundled(golang(golang.org/x/time)) = 3af7569
+# golang.org/x/tools : BSD
+Provides:       bundled(golang(golang.org/x/tools)) = 0.1.0
 # google.golang.org/protobuf : BSD
 Provides:       bundled(golang(google.golang.org/protobuf)) = 1.23.0
+# github.com/go-check/check : BSD
+Provides:       bundled(golang(gopkg.in/check.v1)) = 038fdea
 
 # an inotify filesystem watcher is integrated with syncthing now
 Provides:       syncthing-inotify = 0.8.7-5
 Obsoletes:      syncthing-inotify < 0.8.7-5
+
+# command line interface for syncthing was merged into main binary
+Obsoletes:      syncthing-cli < 1.15.1-1
 
 
 %description
@@ -240,19 +244,6 @@ This package contains the main syncthing server tools:
   to connect to indirectly over the internet.
 
 
-%package        cli
-Summary:        Continuous File Synchronization (CLI)
-
-%description    cli
-Syncthing replaces other file synchronization services with something
-open, trustworthy and decentralized. Your data is your data alone and
-you deserve to choose where it is stored, if it is shared with some
-third party and how it's transmitted over the Internet. Using syncthing,
-that control is returned to you.
-
-This package contains the CLI program.
-
-
 %prep
 %autosetup -n %{name} -p1
 
@@ -297,9 +288,6 @@ export LDFLAGS="-X %{goipath}/lib/build.Program=strelaysrv $COMMON_LDFLAGS"
 export LDFLAGS="-X %{goipath}/lib/build.Program=strelaypoolsrv $COMMON_LDFLAGS"
 %gobuild -o _bin/strelaypoolsrv %{goipath}/cmd/strelaypoolsrv
 
-export LDFLAGS="-X %{goipath}/lib/build.Program=stcli $COMMON_LDFLAGS"
-%gobuild -o _bin/stcli %{goipath}/cmd/syncthing/cli
-
 
 %install
 export GO111MODULE=off
@@ -311,7 +299,6 @@ cp -pav _bin/syncthing %{buildroot}/%{_bindir}/
 cp -pav _bin/stdiscosrv %{buildroot}/%{_bindir}/
 cp -pav _bin/strelaysrv %{buildroot}/%{_bindir}/
 cp -pav _bin/strelaypoolsrv %{buildroot}/%{_bindir}/
-cp -pav _bin/stcli %{buildroot}/%{_bindir}/
 
 # install man pages
 mkdir -p %{buildroot}/%{_mandir}/man1
@@ -332,8 +319,8 @@ cp -pav etc/linux-systemd/system/syncthing@.service %{buildroot}/%{_unitdir}/
 cp -pav etc/linux-systemd/system/syncthing-resume.service %{buildroot}/%{_unitdir}/
 cp -pav etc/linux-systemd/user/syncthing.service %{buildroot}/%{_userunitdir}/
 
-# Unmark source files as executable
-for i in $(find -name "*.go" -executable -print); do
+# unmark source files as executable
+for i in $(find -name "*.go" -type f -executable -print); do
     chmod a-x $i;
 done
 
@@ -343,10 +330,6 @@ done
 
 
 %check
-# restore executable bit on a folder ending in .go
-# (likely caused by a bug in a brp script)
-chmod +x vendor/github.com/miscreant/miscreant.go
-
 export LANG=C.utf8
 export GOPATH=$(pwd)/_build:%{gopath}
 export GO111MODULE=off
@@ -434,13 +417,6 @@ export GO111MODULE=off
 %{_mandir}/man1/strelaysrv*
 
 
-%files cli
-%license LICENSE
-%doc README.md AUTHORS
-
-%{_bindir}/stcli
-
-
 %if %{with devel}
 %files devel -f devel.file-list
 %license LICENSE
@@ -452,14 +428,8 @@ export GO111MODULE=off
 * Thu Apr 15 2021 ElXreno <elxreno@gmail.com> - 1.16.0~rc2-1
 - Update to version 1.16.0-rc.2
 
-* Tue Apr 13 2021 ElXreno <elxreno@gmail.com> - 1.16.0~rc1-1
-- Update to version 1.16.0-rc.1
-
-* Tue Apr 06 2021 ElXreno <elxreno@gmail.com>
-- Updated to version 1.15.1
-
-* Tue Apr 06 2021 ElXreno <elxreno@gmail.com> - 1.15.0-1
-- Update to version 1.15.0
+* Mon Apr 12 2021 Fabio Valentini <decathorpe@gmail.com> - 1.15.1-1
+- Update to version 1.15.1.
 
 * Wed Mar 24 2021 Fabio Valentini <decathorpe@gmail.com> - 1.14.0-1
 - Update to version 1.14.0.
