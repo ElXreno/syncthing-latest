@@ -1,12 +1,12 @@
 %bcond_with devel
 
 %global basever 1.16.0
-%global rcnum   3
+#%%global rcnum   3
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
 Version:        %{basever}%{?rcnum:~rc%{rcnum}}
-Release:        3%{?dist}
+Release:        1%{?dist}
 
 %global goipath github.com/syncthing/syncthing
 %global tag     v%{basever}%{?rcnum:-rc.%{rcnum}}
@@ -425,6 +425,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue May 04 2021 ElXreno <elxreno@gmail.com> - 1.16.0-1
+- Update to version 1.16.0
+
 * Tue Apr 27 2021 ElXreno <elxreno@gmail.com> - 1.16.0~rc3-3
 - Update to version 1.16.0-rc.3
 
