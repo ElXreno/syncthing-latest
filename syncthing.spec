@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever 1.16.0
+%global basever 1.16.1
 #%%global rcnum   3
 
 Name:           syncthing
@@ -425,6 +425,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Wed May 05 2021 ElXreno <elxreno@gmail.com> - 1.16.1-1
+- Update to version 1.16.1
+
 * Tue May 04 2021 ElXreno <elxreno@gmail.com> - 1.16.0-1
 - Update to version 1.16.0
 
