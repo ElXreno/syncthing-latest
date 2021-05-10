@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever 1.15.1
+%global basever 1.16.1
 #%%global rcnum   0
 
 Name:           syncthing
@@ -67,7 +67,7 @@ Provides:       bundled(golang(github.com/bkaradzic/go-lz4)) = 7224d8d
 # github.com/calmh/xdr : MIT
 Provides:       bundled(golang(github.com/calmh/xdr)) = 1.1.0
 # github.com/ccding/go-stun : ASL 2.0
-Provides:       bundled(golang(github.com/ccding/go-stun)) = 0.1.2
+Provides:       bundled(golang(github.com/ccding/go-stun)) = 0.1.3
 # github.com/certifi/gocertifi : MPLv2.0
 Provides:       bundled(golang(github.com/certifi/gocertifi)) = 2c3bb06
 # github.com/cespare/xxhash : MIT
@@ -425,6 +425,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Mon May 10 2021 Fabio Valentini <decathorpe@gmail.com> - 1.16.1-1
+- Update to version 1.16.1.
+
 * Mon Apr 12 2021 Fabio Valentini <decathorpe@gmail.com> - 1.15.1-1
 - Update to version 1.15.1.
 
