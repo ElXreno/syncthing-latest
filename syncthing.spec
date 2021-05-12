@@ -1,7 +1,7 @@
 %bcond_with devel
 
 %global basever 1.17.0
-%global rcnum   2
+%global rcnum   3
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
@@ -51,7 +51,7 @@ Provides:       bundled(moment) = 2.19.4
 # generate with "./vendor2provides.py path/to/vendor/modules.txt"
 
 # github.com/AudriusButkevicius/pfilter : MIT
-Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = fad42c1
+Provides:       bundled(golang(github.com/AudriusButkevicius/pfilter)) = e9aaf99
 # github.com/AudriusButkevicius/recli : MPLv2.0
 Provides:       bundled(golang(github.com/AudriusButkevicius/recli)) = 0.0.5
 # github.com/Azure/go-ntlmssp : MIT
@@ -423,6 +423,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Wed May 12 2021 ElXreno <elxreno@gmail.com> - 1.17.0~rc3-1
+- Update to version 1.17.0-rc.3
+
 * Tue May 11 2021 ElXreno <elxreno@gmail.com> - 1.17.0~rc2-1
 - Update to version 1.17.0-rc.2
 
