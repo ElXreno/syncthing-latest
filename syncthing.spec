@@ -1,7 +1,7 @@
 %bcond_with devel
 
 %global basever 1.17.0
-%global rcnum   3
+%global rcnum   4
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
@@ -423,6 +423,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Tue May 25 2021 ElXreno <elxreno@gmail.com> - 1.17.0~rc4-1
+- Update to version 1.17.0-rc.4
+
 * Wed May 12 2021 ElXreno <elxreno@gmail.com> - 1.17.0~rc3-1
 - Update to version 1.17.0-rc.3
 
