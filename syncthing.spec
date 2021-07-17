@@ -1,6 +1,6 @@
 %bcond_with devel
 
-%global basever 1.17.0
+%global basever 1.18.0
 #%%global rcnum   0
 
 Name:           syncthing
@@ -421,6 +421,9 @@ export GO111MODULE=off
 
 
 %changelog
+* Sat Jul 17 2021 Fabio Valentini <decathorpe@gmail.com> - 1.18.0-1
+- Update to version 1.18.0.
+
 * Tue Jun 15 2021 Fabio Valentini <decathorpe@gmail.com> - 1.17.0-1
 - Update to version 1.17.0.
 
