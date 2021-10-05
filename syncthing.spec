@@ -1,7 +1,7 @@
 %bcond_with devel
 
 %global basever 1.18.3
-%global rcnum   2
+#%%global rcnum   2
 
 Name:           syncthing
 Summary:        Continuous File Synchronization
